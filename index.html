@@ -39,6 +39,18 @@ body.menu-open{overflow:hidden}
 .reading-card{box-shadow:0 5px 0 #b4dcdf}.kitchen-content{padding:20px 28px}
 @media(max-width:520px){.kitchen-scene{height:235px}.kitchen-chef{width:128px;left:9px;bottom:10px}.kitchen-chef img{height:157px;border-radius:20px}.kitchen-chef span{font-size:11px}.burger-tray{right:9px;bottom:28px;font-size:21px;gap:2px}.kitchen-sign{font-size:19px;top:12px}.kitchen-heading h2{font-size:25px}.kitchen-content{padding:14px}.kitchen-options .choice{font-size:20px}}
 
+
+/* Paparan peta penuh: modal misi kekal di atas peta. */
+.map-fullscreen-toggle{position:absolute;right:14px;top:14px;z-index:2;border:3px solid white;border-radius:14px;background:#07536ee8;color:white;padding:10px 14px;font-weight:900;box-shadow:0 3px 0 #002d43;min-height:44px}
+body.map-fullscreen{overflow:hidden}
+body.map-fullscreen .mapbox{position:fixed;inset:0;width:100vw;height:100dvh;aspect-ratio:auto;border:0;border-radius:0;z-index:5;box-shadow:none;background:#053f59}
+body.map-fullscreen .mapbox canvas{width:100%;height:100%;object-fit:contain}
+body.map-fullscreen .bubble{top:16px;max-width:calc(100% - 235px)}
+body.map-fullscreen .dpad{left:22px;bottom:22px;grid-template-columns:repeat(3,55px);grid-template-rows:repeat(3,55px);gap:5px}
+body.map-fullscreen .interact{right:22px;bottom:25px;font-size:17px;padding:15px 20px}
+body.map-fullscreen .map-fullscreen-toggle{top:16px;right:20px}
+@media(min-width:1000px){header,.wrap{max-width:1600px}.map-fullscreen-toggle{font-size:15px}}
+@media(max-width:600px){.map-fullscreen-toggle{font-size:11px;padding:8px}.mapbox .bubble{max-width:calc(100% - 170px)}body.map-fullscreen .bubble{max-width:calc(100% - 170px)}body.map-fullscreen .dpad{left:12px;bottom:12px;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px)}body.map-fullscreen .interact{font-size:12px;max-width:48%;right:12px;bottom:16px}}
 </style></head><body>
 <div id="startMenu" role="dialog" aria-modal="true" aria-labelledby="startTitle">
   <div class="start-bubbles" aria-hidden="true"><span style="--left:8%;--size:30px;--duration:13s;--delay:-4s"></span><span style="--left:25%;--size:53px;--duration:17s;--delay:-10s"></span><span style="--left:69%;--size:24px;--duration:11s;--delay:-2s"></span><span style="--left:86%;--size:44px;--duration:15s;--delay:-8s"></span><span style="--left:50%;--size:16px;--duration:10s;--delay:-6s"></span></div>
@@ -55,7 +67,7 @@ body.menu-open{overflow:hidden}
     <p class="start-note">Nama dan kelas disimpan pada peranti ini sahaja. Tidak dihantar ke pelayan.</p>
   </form>
 </div>
-<header><div><h1>🍍 SiBaCa</h1><div class="player-label" id="studentDisplay"></div><div class="subtitle">Pengembaraan Membaca Bikini Bottom</div></div><div class="stars" id="stars">☆☆☆☆☆</div></header><div class="wrap"><div class="banner" id="banner">⭐ MISI 1 — Pergi ke Rumah Patrick!</div><div class="layout"><div class="mapbox"><canvas id="map" width="1536" height="1024" aria-label="Peta pengembaraan"></canvas><div class="bubble" id="hint">Gunakan anak panah / WASD untuk bergerak. Dekati ⭐ dan tekan E.</div><button class="interact hidden" id="interact">BERCAKAP</button><div class="dpad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="right" data-dir="right">▶</button><button class="down" data-dir="down">▼</button></div></div><aside class="panel"><h2>🗺️ Jejak pengembaraan</h2><div class="mission-list" id="missionList"></div><p class="help">Berjalan ke lokasi yang bercahaya. Selesaikan latihan untuk mendapat ⭐ dan membuka lokasi seterusnya.</p><button class="btn yellow" id="reset">Mulakan semula</button><p class="edit-note">Kandungan latihan boleh diubah dalam bahagian LESSON_DATA di dalam fail ini.</p></aside></div></div><div id="modalRoot"></div>
+<header><div><h1>🍍 SiBaCa</h1><div class="player-label" id="studentDisplay"></div><div class="subtitle">Pengembaraan Membaca Bikini Bottom</div></div><div class="stars" id="stars">☆☆☆☆☆</div></header><div class="wrap"><div class="banner" id="banner">⭐ MISI 1 — Pergi ke Rumah Patrick!</div><div class="layout"><div class="mapbox"><canvas id="map" width="1536" height="1024" aria-label="Peta pengembaraan"></canvas><button type="button" class="map-fullscreen-toggle" id="fullMapButton" aria-pressed="false">⛶ SKRIN PENUH</button><div class="bubble" id="hint">Gunakan anak panah / WASD untuk bergerak. Dekati ⭐ dan tekan E.</div><button class="interact hidden" id="interact">BERCAKAP</button><div class="dpad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="right" data-dir="right">▶</button><button class="down" data-dir="down">▼</button></div></div><aside class="panel"><h2>🗺️ Jejak pengembaraan</h2><div class="mission-list" id="missionList"></div><p class="help">Berjalan ke lokasi yang bercahaya. Selesaikan latihan untuk mendapat ⭐ dan membuka lokasi seterusnya.</p><button class="btn yellow" id="reset">Mulakan semula</button><p class="edit-note">Kandungan latihan boleh diubah dalam bahagian LESSON_DATA di dalam fail ini.</p></aside></div></div><div id="modalRoot"></div>
 <script>
 /* ===============================================================
    LESSON_DATA — UBAH KANDUNGAN LATIHAN DI SINI.
@@ -359,4 +371,29 @@ renderModal=function(){if(modal?.id==='krusty')renderKitchen();else baseRenderMo
 closeModal=function(){stopKitchenAudio();baseCloseModal();kitchenRead=false};
 
 
+</script><script>
+const fullMapButton=document.getElementById('fullMapButton');
+let mapNativeFullscreen=false;
+function updateFullMapButton(){
+ const active=document.body.classList.contains('map-fullscreen');
+ fullMapButton.textContent=active?'⛶ KELUAR SKRIN PENUH':'⛶ SKRIN PENUH';
+ fullMapButton.setAttribute('aria-pressed',String(active));
+ fullMapButton.title=active?'Keluar daripada skrin penuh (Esc)':'Besarkan peta ke skrin penuh';
+}
+async function exitFullMap(){
+ document.body.classList.remove('map-fullscreen');pressed.clear();updateFullMapButton();
+ if(mapNativeFullscreen&&document.fullscreenElement){try{await document.exitFullscreen()}catch(e){}}
+ mapNativeFullscreen=false;
+}
+fullMapButton.addEventListener('click',async()=>{
+ if(document.body.classList.contains('map-fullscreen')){await exitFullMap();return}
+ document.body.classList.add('map-fullscreen');pressed.clear();updateFullMapButton();
+ if(document.documentElement.requestFullscreen){try{await document.documentElement.requestFullscreen();mapNativeFullscreen=true}catch(e){mapNativeFullscreen=false}}
+});
+document.addEventListener('fullscreenchange',()=>{
+ if(!document.fullscreenElement&&mapNativeFullscreen){mapNativeFullscreen=false;document.body.classList.remove('map-fullscreen');pressed.clear();updateFullMapButton()}
+});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('map-fullscreen')&&!modal)exitFullMap()});
+window.addEventListener('blur',()=>pressed.clear());
+updateFullMapButton();
 </script></body></html>
