@@ -58,6 +58,18 @@ const startMenu=document.getElementById('startMenu');
 const startForm=document.getElementById('startForm');
 document.body.classList.add('menu-open');
 if(studentProfile){document.getElementById('studentName').value=studentProfile.name;document.getElementById('studentClass').value=studentProfile.className;}
+/* Tab dalam ruangan nama/kelas memasukkan empat ruang; Shift+Tab masih menukar fokus. */
+['studentName','studentClass'].forEach(function(id){
+ const field=document.getElementById(id);
+ field.addEventListener('keydown',function(event){
+  if(event.key!=='Tab'||event.shiftKey||event.ctrlKey||event.altKey||event.metaKey)return;
+  event.preventDefault();
+  const start=field.selectionStart,end=field.selectionEnd;
+  const spaces='    ';
+  field.setRangeText(spaces,start,end,'end');
+  field.dispatchEvent(new Event('input',{bubbles:true}));
+ });
+});
 startForm.addEventListener('submit',function(event){
  event.preventDefault();
  const name=document.getElementById('studentName').value.trim().replace(/\s+/g,' ');
