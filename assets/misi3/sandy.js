@@ -32,3 +32,16 @@
  closeModal=function(){if(modal?.id==='sandy'){session++;haltAnimation();stopAudio();clearRecording();stage=-1;read=false;collected=false;feedback=''}previousClose()};
  window.addEventListener('keydown',e=>{if(modal?.id!=='sandy'||!read||collected||busy||e.target.closest('input'))return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();by(e.key==='ArrowLeft'?'s3Left':'s3Right')?.click()}if(e.code==='Space'){e.preventDefault();by('s3Grab')?.click()}});
 })();
+
+// Pautan terus ke Misi 3, selepas murid melengkapkan skrin mula.
+(function(){
+ if(new URLSearchParams(location.search).get('misi')!=='3')return;
+ const form=document.getElementById('startForm');
+ if(!form)return;
+ form.addEventListener('submit',()=>setTimeout(()=>{
+  if(!document.getElementById('startMenu').hidden)return;
+  const mission=LESSON_DATA.find(m=>m.id==='sandy');
+  if(!mission)return;
+  modal=mission;step=-1;pressed.clear();renderModal();
+ },0));
+})();
