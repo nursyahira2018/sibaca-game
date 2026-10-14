@@ -20,7 +20,33 @@ body.menu-open{overflow:hidden}
 .start-card .start-note{font-size:11px;color:#537d86;margin:12px 0 0}
 .player-label{font-weight:900;font-size:12px;margin-top:5px}
 @media(prefers-reduced-motion:reduce){.start-bubbles span{animation:none}}
-</style></head><body>
+
+/* Menu utama selepas pendaftaran — prototaip branch rumah-3d */
+#homeMenu{position:fixed;inset:0;z-index:1001;display:grid;place-items:center;padding:18px;background:linear-gradient(145deg,#002b5abf,#007c9ab8),url('assets/peta.png') center/cover no-repeat}
+#homeMenu[hidden]{display:none!important}
+.home-card{width:min(580px,100%);max-height:94vh;overflow:auto;padding:25px;background:linear-gradient(160deg,#fffef1,#d6faff);border:5px solid white;border-radius:30px;box-shadow:0 15px 0 #0080a2,0 30px 65px #002a5b99;text-align:center}
+.home-card h2{color:#087eac;font-size:clamp(26px,5vw,39px)}
+.home-card p{font-weight:800}.home-buttons{display:grid;gap:10px;margin:20px auto;max-width:390px}
+.home-buttons button{padding:12px;border:3px solid #fff;border-radius:16px;background:#ffcf4d;color:#265569;font-weight:1000;font-size:17px;box-shadow:0 4px 0 #d49b25}
+.home-buttons button:nth-child(2){background:#9eeaf6;box-shadow:0 4px 0 #42a5ba}
+.home-buttons button:nth-child(3){background:#f6b7df;box-shadow:0 4px 0 #d27db2}
+.home-buttons button:nth-child(4){background:#bde7a0;box-shadow:0 4px 0 #78b360}
+.home-details{text-align:left;background:white;border-radius:17px;padding:15px;line-height:1.65;font-size:14px}
+.home-details[hidden]{display:none!important}
+.home-details h3{color:#087eac;font-size:20px}
+.home-details ol{padding-left:23px;margin:8px 0}
+.home-details li{margin-bottom:7px}
+</style></head><body><div id="homeMenu" hidden role="dialog" aria-modal="true" aria-labelledby="homeTitle"><section class="home-card">
+<h2 id="homeTitle">🍍 Selamat datang ke rumah SpongeBob!</h2>
+<p id="homeGreeting">Bersedia untuk mengembara?</p>
+<div class="home-buttons">
+<button type="button" id="homePlay">▶️ MULA BERMAIN</button>
+<button type="button" data-home-panel="how">📖 CARA BERMAIN</button>
+<button type="button" data-home-panel="objectives">🎯 OBJEKTIF PEMBELAJARAN</button>
+<button type="button" data-home-panel="settings">⚙️ TETAPAN</button>
+</div>
+<div id="homeDetails" class="home-details" hidden aria-live="polite"></div>
+</section></div>
 <div id="startMenu" role="dialog" aria-modal="true" aria-labelledby="startTitle">
   <div class="start-bubbles" aria-hidden="true"><span style="--left:8%;--size:30px;--duration:13s;--delay:-4s"></span><span style="--left:25%;--size:53px;--duration:17s;--delay:-10s"></span><span style="--left:69%;--size:24px;--duration:11s;--delay:-2s"></span><span style="--left:86%;--size:44px;--duration:15s;--delay:-8s"></span><span style="--left:50%;--size:16px;--duration:10s;--delay:-6s"></span></div>
   <form class="start-card" id="startForm">
@@ -81,9 +107,37 @@ startForm.addEventListener('submit',function(event){
  studentProfile={name,className};
  try{localStorage.setItem(STUDENT_KEY,JSON.stringify(studentProfile));}catch(e){}
  document.getElementById('studentDisplay').textContent='👩‍🎓 '+name+' · '+className;
- startMenu.hidden=true;document.body.classList.remove('menu-open');
+ startMenu.hidden=true;document.getElementById('homeGreeting').textContent='Hai, '+name+'! Sedia untuk lima misi membaca?';document.getElementById('homeMenu').hidden=false;
 });
 
+
+/* Menu pembukaan sementara: boleh diganti dengan adegan ruang tamu 3D kelak. */
+const homeMenu=document.getElementById('homeMenu');
+const homeDetails=document.getElementById('homeDetails');
+const homePanels={
+ how:`<h3>📖 Cara Bermain</h3><p>Gerakkan SpongeBob menggunakan kekunci anak panah atau WASD. Dekati tanda ⭐ dan tekan E atau butang BERCAKAP untuk memulakan misi. Selesaikan misi mengikut turutan untuk memperoleh lima bintang.</p><ol>
+ <li><b>Misi 1: Membaca Perkataan</b> — Rumah Patrick. Baca lima perkataan.</li>
+ <li><b>Misi 2: Membina dan Membaca Frasa</b> — Krusty Krab. Padankan dan baca simpulan bahasa serta ketahui maksudnya.</li>
+ <li><b>Misi 3: Membaca Ayat</b> — Rumah Sandy. Baca ayat dengan sebutan dan intonasi yang sesuai.</li>
+ <li><b>Misi 4: Membaca Ayat dan Ujian Pemahaman</b> — Goo Lagoon. Baca ayat, kemudian jawab soalan.</li>
+ <li><b>Misi 5: Membaca Dialog dan Ujian Kefahaman</b> — Padang Obor-obor. Baca dialog mengikut watak dan jawab soalan.</li>
+ </ol><p>Gunakan butang Dengar Contoh, Rakam dan Dengar Rakaman semasa latihan membaca.</p>`,
+ objectives:`<h3>🎯 Objektif Pembelajaran</h3><p><b>Standard Pembelajaran 2.1.1:</b> Membaca dan memahami petikan dengan sebutan yang betul dan intonasi yang sesuai.</p><p>Selepas pengembaraan, murid diharapkan dapat:</p><ol>
+ <li>Membaca perkataan, frasa simpulan bahasa, ayat dan dialog dengan sebutan yang betul serta intonasi yang sesuai.</li>
+ <li>Memahami maksud simpulan bahasa yang dipelajari.</li>
+ <li>Menjawab soalan pemahaman berdasarkan ayat dan dialog yang dibaca.</li>
+ </ol>`,
+ settings:`<h3>⚙️ Tetapan</h3><p>Gunakan butang Dengar Contoh dalam setiap misi untuk mendengar bacaan. Kelantangan boleh dilaraskan melalui peranti.</p><p>Kemajuan bintang disimpan pada pelayar yang digunakan.</p>`
+};
+document.querySelectorAll('[data-home-panel]').forEach(button=>button.addEventListener('click',()=>{
+ const key=button.dataset.homePanel;
+ if(!homeDetails.hidden&&homeDetails.dataset.active===key){homeDetails.hidden=true;return;}
+ homeDetails.innerHTML=homePanels[key];homeDetails.dataset.active=key;homeDetails.hidden=false;
+ homeDetails.scrollIntoView({behavior:'smooth',block:'nearest'});
+}));
+document.getElementById('homePlay').addEventListener('click',()=>{
+ homeMenu.hidden=true;document.body.classList.remove('menu-open');homeDetails.hidden=true;
+});
 const KEY='sibaca-local-adventure-v1';let completed=[];try{completed=JSON.parse(localStorage.getItem(KEY)||'[]').filter(id=>LESSON_DATA.some(m=>m.id===id));}catch{}completed=LESSON_DATA.filter(m=>completed.includes(m.id)).map(m=>m.id);let player={x:195,y:395},pressed=new Set(),nearby=null,modal=null,step=0,selected=null,recorded=false,mediaRecorder=null,chunks=[],recordUrl=null,recordStream=null,feedback='',listenDone=false;const canvas=document.getElementById('map'),ctx=canvas.getContext('2d'),mapImg=new Image();mapImg.src='assets/peta.png';const spriteImg=new Image();spriteImg.src='assets/spongebob-atlas.png';let facing='down',isWalking=false;
 // Kesan air: zon laut terbuka di bahagian bawah peta. Ubah koordinat jika peta berubah.
 function isInWater(x,y){
