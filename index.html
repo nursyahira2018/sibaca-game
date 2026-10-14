@@ -42,7 +42,7 @@ body.menu-open{overflow:hidden}
 <div class="home-buttons">
 <button type="button" id="homePlay">▶️ MULA BERMAIN</button>
 <button type="button" data-home-panel="how">📖 CARA BERMAIN</button>
-<button type="button" data-home-panel="objectives">🎯 OBJEKTIF PEMBELAJARAN</button>
+<button type="button" data-home-panel="objectives">🎯 TUJUAN PEMBELAJARAN</button>
 <button type="button" data-home-panel="settings">⚙️ TETAPAN</button>
 </div>
 <div id="homeDetails" class="home-details" hidden aria-live="polite"></div>
@@ -122,11 +122,7 @@ const homePanels={
  <li><b>Misi 4: Membaca Ayat dan Ujian Pemahaman</b> — Goo Lagoon. Baca ayat, kemudian jawab soalan.</li>
  <li><b>Misi 5: Membaca Dialog dan Ujian Kefahaman</b> — Padang Obor-obor. Baca dialog mengikut watak dan jawab soalan.</li>
  </ol><p>Gunakan butang Dengar Contoh, Rakam dan Dengar Rakaman semasa latihan membaca.</p>`,
- objectives:`<h3>🎯 Objektif Pembelajaran</h3><p><b>Standard Pembelajaran 2.1.1:</b> Membaca dan memahami petikan dengan sebutan yang betul dan intonasi yang sesuai.</p><p>Selepas pengembaraan, murid diharapkan dapat:</p><ol>
- <li>Membaca perkataan, frasa simpulan bahasa, ayat dan dialog dengan sebutan yang betul serta intonasi yang sesuai.</li>
- <li>Memahami maksud simpulan bahasa yang dipelajari.</li>
- <li>Menjawab soalan pemahaman berdasarkan ayat dan dialog yang dibaca.</li>
- </ol>`,
+ objectives:`<h3>🎯 Tujuan Pembelajaran</h3><p>Permainan <b>SiBaCa: Pengembaraan Membaca Bikini Bottom</b> dibangunkan untuk membantu murid meningkatkan kemahiran membaca Bahasa Melayu melalui aktiviti interaktif secara berperingkat.</p><p><b>Bidang:</b> 2.0 Kemahiran Membaca</p><p><b>Standard Kandungan (SK) 2.1:</b> Asas membaca dan memahami.</p><p><b>Standard Pembelajaran (SP) 2.1.1:</b> Membaca dan memahami petikan dengan sebutan yang betul dan intonasi yang sesuai.</p>`,
  settings:`<h3>⚙️ Tetapan</h3><p>Gunakan butang Dengar Contoh dalam setiap misi untuk mendengar bacaan. Kelantangan boleh dilaraskan melalui peranti.</p><p>Kemajuan bintang disimpan pada pelayar yang digunakan.</p>`
 };
 document.querySelectorAll('[data-home-panel]').forEach(button=>button.addEventListener('click',()=>{
