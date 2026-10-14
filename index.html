@@ -574,5 +574,17 @@ const by=id=>document.getElementById(id);by('g4Close').onclick=closeModal;by('g4
 }
 renderModal=function(){if(modal?.id==='goo')draw();else previousRender()};closeModal=function(){if(modal?.id==='goo'){stop();stage=-1;reset()}previousClose()};
 })();
-</script></body></html>
+</script><style id="full-screen-map-default">
+/* Peta memenuhi skrin secara lalai tanpa panel jejak. */
+body{overflow:hidden}
+body>header,.wrap>.banner,.layout>.panel{display:none!important}
+.wrap{max-width:none;width:100%;margin:0;padding:0}
+.layout{display:block}
+.mapbox,body.map-fullscreen .mapbox{position:fixed;inset:0;width:100vw;height:100dvh;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none;z-index:5;background:#057da6}
+.mapbox canvas,body.map-fullscreen .mapbox canvas{display:block;width:100%;height:100%;object-fit:fill}
+.mapbox .bubble{top:16px;left:16px;max-width:calc(100% - 210px)}
+.mapbox .dpad{left:20px;bottom:20px;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(3,50px);gap:4px}
+.mapbox .map-fullscreen-toggle{top:16px;right:16px}
+@media(max-width:600px){.mapbox .bubble{top:10px;left:10px;max-width:calc(100% - 165px)}.mapbox .map-fullscreen-toggle{top:10px;right:10px}.mapbox .dpad{left:12px;bottom:14px;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px)}}
+</style></body></html>
 
