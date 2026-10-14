@@ -58,6 +58,18 @@ const startMenu=document.getElementById('startMenu');
 const startForm=document.getElementById('startForm');
 document.body.classList.add('menu-open');
 if(studentProfile){document.getElementById('studentName').value=studentProfile.name;document.getElementById('studentClass').value=studentProfile.className;}
+/* Pastikan ruang boleh ditaip pada borang walaupun kekunci Space dikawal oleh permainan. */
+['studentName','studentClass'].forEach(function(id){
+ const field=document.getElementById(id);
+ field.addEventListener('keydown',function(event){
+  if(event.code!=='Space'&&event.key!==' ')return;
+  event.stopImmediatePropagation();
+  event.preventDefault();
+  const start=field.selectionStart,end=field.selectionEnd;
+  field.setRangeText(' ',start,end,'end');
+  field.dispatchEvent(new Event('input',{bubbles:true}));
+ },true);
+});
 startForm.addEventListener('submit',function(event){
  event.preventDefault();
  const name=document.getElementById('studentName').value.trim().replace(/\s+/g,' ');
