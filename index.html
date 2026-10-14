@@ -446,6 +446,17 @@ window.addEventListener('keydown',e=>{if(modal?.id!=='jelly'||e.target.closest('
 @keyframes gooBob{50%{transform:translateY(-10px) rotate(-4deg)}}@keyframes gooGlow{to{transform:scale(1.08)}}@keyframes gooFloat{to{transform:translateX(50px)}}@keyframes gooShift{to{background-position:130px 0}}
 @media(max-width:700px){.goo-world{height:96dvh;min-height:0;border-radius:18px}.goo-content{display:flex;flex-direction:column;gap:5px;justify-content:flex-start;padding:8px}.goo-larry{align-self:center;display:flex;align-items:center;gap:8px}.goo-larry .character{font-size:64px}.goo-larry .nameplate{font-size:12px;padding:4px 10px}.goo-card{width:100%;flex:1;min-height:0;padding:13px}.goo-answers{grid-template-columns:1fr}.goo-answer{min-height:50px;display:flex;align-items:center;gap:15px;text-align:left;padding:5px 10px}.goo-answer b{font-size:23px}.goo-sun{width:65px;height:65px}.goo-umbrella{bottom:9%}.goo-top{padding:7px 9px}.goo-top strong{font-size:16px}.goo-ctl{padding:6px;font-size:12px}.goo-story{font-size:17px}.goo-shell{display:none}}
 @media(prefers-reduced-motion:reduce){.goo-world *{animation:none!important;transition:none!important}}
+
+/* Goo Lagoon uploaded-cover upgrade */
+.goo-world:has(#gooStart){background:#08bbd3 url('assets/goo-lagoon-cover.jpg') center center / cover no-repeat}
+.goo-world:has(#gooStart) .goo-sky,.goo-world:has(#gooStart) .goo-larry{display:none}
+.goo-world:has(#gooStart) .goo-content{display:flex;justify-content:center;align-items:flex-end;padding:20px 24px 26px}
+.goo-world:has(#gooStart) .goo-card{width:min(710px,95%);flex:0 1 auto;max-height:65%;background:linear-gradient(135deg,#ffffffed,#fff8dbe9);border:4px solid #fff;border-radius:27px;text-align:center;box-shadow:0 8px 0 #ffc04b,0 15px 34px #023d7199}
+.goo-world:has(#gooStart) .goo-top{background:linear-gradient(90deg,#075ca8dc,#07b1d4c9);border-bottom:3px solid #fff9;color:#fff}
+.goo-world:has(#gooStart) .goo-top strong{color:#fff;text-shadow:0 2px 2px #065576}
+.goo-world:has(#gooStart) .goo-balls{display:none}
+.goo-world:has(#gooStart) .goo-start{font-size:clamp(15px,1.8vw,21px);line-height:1.35;margin:10px auto}
+@media(max-width:700px){.goo-world:has(#gooStart){background-position:63% center}.goo-world:has(#gooStart) .goo-content{justify-content:flex-end;padding:8px 8px 15px}.goo-world:has(#gooStart) .goo-card{width:100%;min-height:0;max-height:67%;overflow:auto;padding:13px}.goo-world:has(#gooStart) .goo-start{font-size:14px}.goo-world:has(#gooStart) .goo-card h2{font-size:22px}}
 </style>
 <script>
 (function(){
