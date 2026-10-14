@@ -1,0 +1,225 @@
+<!doctype html><html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SiBaCa — Pengembaraan Membaca</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;700;800;900&display=swap');*{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#a8f0f5,#f7eeb4);font-family:Nunito,Arial,sans-serif;color:#174f65}button{font:inherit;cursor:pointer}header{max-width:1300px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h1,h2,h3{font-family:'Baloo 2',Nunito,sans-serif;margin:0}h1{font-size:29px;line-height:1}.subtitle{font-size:12px;font-weight:900}.stars{background:white;border:3px solid #ffe08c;border-radius:18px;padding:8px 15px;font-weight:900}.star{font-size:25px;color:#b2d3d5}.star.done{color:#f5ad17}.wrap{max-width:1300px;margin:auto;padding:0 12px 22px}.banner{border:3px solid #fff;background:#fff9d8;border-radius:18px;padding:9px 16px;font-weight:900;margin-bottom:10px;box-shadow:0 4px 0 #e8ca70}.layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:12px}.mapbox{position:relative;border:5px solid white;border-radius:23px;overflow:hidden;background:#078cbb;box-shadow:0 7px 0 #62bac0;aspect-ratio:3/2}.mapbox canvas{width:100%;height:100%;display:block;touch-action:none}.bubble{position:absolute;left:12px;top:12px;background:#fffce7eb;border:2px solid white;border-radius:15px;padding:8px 12px;max-width:60%;font-weight:900;font-size:13px}.interact{position:absolute;right:14px;bottom:16px;background:#ffd25d;border:3px solid white;border-radius:16px;padding:12px 15px;font-weight:1000;color:#215166;box-shadow:0 4px 0 #bc8e2e}.dpad{position:absolute;left:12px;bottom:12px;display:grid;grid-template-columns:repeat(3,39px);grid-template-rows:repeat(3,39px);gap:2px;touch-action:none}.dpad button{border:2px solid #fff9;border-radius:11px;background:#12627bcc;color:white;font-weight:900;font-size:19px}.dpad .up{grid-column:2;grid-row:1}.dpad .left{grid-column:1;grid-row:2}.dpad .right{grid-column:3;grid-row:2}.dpad .down{grid-column:2;grid-row:3}.panel{background:#f8fff9;border:3px solid #fff;border-radius:21px;padding:15px;box-shadow:0 6px 0 #9dd5cc}.panel h2{font-size:23px}.mission{padding:9px 7px;border-radius:12px;display:flex;gap:9px;align-items:center;margin:7px 0;background:#e5f2f2;font-size:12px;font-weight:900}.mission.current{background:#fff0b8;border:2px solid #e5b83c}.mission.done{background:#dcf6dc}.number{display:grid;place-items:center;border-radius:50%;background:#1e8eb0;color:white;min-width:29px;height:29px}.help{font-size:12px;line-height:1.5}.overlay{position:fixed;inset:0;z-index:10;background:#043b5bbd;display:flex;align-items:center;justify-content:center;padding:12px}.modal{background:#fff9e7;border:5px solid white;border-radius:25px;width:min(650px,100%);max-height:95vh;overflow:auto;padding:21px;box-shadow:0 20px 80px #002e5488}.modal h2{font-size:27px}.speech{background:white;border:2px solid #ffe1a1;border-radius:15px;padding:14px;margin:12px 0;font-size:19px;line-height:1.6;font-weight:900;text-align:center}.small{font-size:13px;color:#587983}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.btn{border:0;border-radius:13px;padding:11px 15px;font-weight:1000;background:#1b9bb3;color:white;box-shadow:0 3px 0 #117083}.btn.yellow{background:#ffc940;color:#315465;box-shadow:0 3px 0 #c99922}.btn.pink{background:#e66da2}.btn:disabled{opacity:.4;cursor:not-allowed}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.choice{padding:12px;border-radius:14px;border:2px solid #b5d9d7;background:#efffff;font-weight:900;color:#1c6272}.choice.selected{background:#fff0b6;border-color:#e6b73d}.feedback{border-radius:12px;padding:10px;background:#e2f8dc;font-weight:900;margin:8px 0}.progress{font-weight:900;color:#547680;font-size:13px}.recording{font-size:12px;color:#a04c5b;font-weight:900}.edit-note{font-size:11px;opacity:.75}.hidden{display:none!important}@media(max-width:750px){.layout{grid-template-columns:1fr}.panel{padding:9px}.panel .mission-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}.mission{flex-direction:column;text-align:center;font-size:9px;gap:3px;padding:6px 2px}.number{min-width:23px;height:23px}.mapbox{aspect-ratio:3/2}.bubble{font-size:10px;max-width:52%}.interact{padding:8px;font-size:10px;max-width:42%}.modal{padding:14px}.speech{font-size:17px}.panel .help{display:none}} </style></head><body>
+<header><div><h1>🍍 SiBaCa</h1><div class="subtitle">Pengembaraan Membaca Bikini Bottom</div></div><div class="stars" id="stars">☆☆☆☆☆</div></header><div class="wrap"><div class="banner" id="banner">⭐ MISI 1 — Pergi ke Rumah Patrick!</div><div class="layout"><div class="mapbox"><canvas id="map" width="1536" height="1024" aria-label="Peta pengembaraan"></canvas><div class="bubble" id="hint">Gunakan anak panah / WASD untuk bergerak. Dekati ⭐ dan tekan E.</div><button class="interact hidden" id="interact">BERCAKAP</button><div class="dpad"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="right" data-dir="right">▶</button><button class="down" data-dir="down">▼</button></div></div><aside class="panel"><h2>🗺️ Jejak pengembaraan</h2><div class="mission-list" id="missionList"></div><p class="help">Berjalan ke lokasi yang bercahaya. Selesaikan latihan untuk mendapat ⭐ dan membuka lokasi seterusnya.</p><button class="btn yellow" id="reset">Mulakan semula</button><p class="edit-note">Kandungan latihan boleh diubah dalam bahagian LESSON_DATA di dalam fail ini.</p></aside></div></div><div id="modalRoot"></div>
+<script>
+/* ===============================================================
+   LESSON_DATA — UBAH KANDUNGAN LATIHAN DI SINI.
+   'read' = membaca dan merakam, 'match' = membina simpulan bahasa,
+   'quiz' = membaca kemudian menjawab soalan.
+   =============================================================== */
+const LESSON_DATA = [
+ {id:'patrick',place:'Rumah Patrick',npc:'Patrick',x:540,y:350,mx:540,my:175,kind:'read',title:'Misi 1 · Membaca Perkataan',dialog:'Hai, kawan! Saya perlukan bantuan membaca lima perkataan. Jom cuba bersama-sama!',items:[{text:'hati'},{text:'tulang'},{text:'tangan'},{text:'kepala'},{text:'kaki'}]},
+ {id:'krusty',place:'Krusty Krab',npc:'Encik Krabs',x:900,y:408,mx:900,my:190,kind:'match',title:'Misi 2 · Simpulan Bahasa',dialog:'Selamat datang! Padankan perkataan supaya terbentuk simpulan bahasa yang betul!',items:[{text:'baik hati',first:'baik',answer:'hati',options:['tangan','hati','bangku'],meaning:'Orang yang suka menolong dan bersikap baik.'},{text:'ringan tulang',first:'ringan',answer:'tulang',options:['tulang','kepala','hati'],meaning:'Rajin membantu atau bekerja.'},{text:'buah tangan',first:'buah',answer:'tangan',options:['bangku','hati','tangan'],meaning:'Hadiah yang dibawa ketika melawat seseorang.'},{text:'besar kepala',first:'besar',answer:'kepala',options:['tulang','kepala','kaki'],meaning:'Sombong atau degil.'},{text:'kaki bangku',first:'kaki',answer:'bangku',options:['bangku','tangan','kepala'],meaning:'Tidak pandai bermain bola.'}]},
+ {id:'sandy',place:'Rumah Sandy',npc:'Sandy',x:1290,y:456,mx:1290,my:195,kind:'read',title:'Misi 3 · Membaca Ayat',dialog:'Hai! Mari kita berlatih membaca ayat dengan sebutan dan intonasi yang sesuai.',items:[{text:'Aina seorang murid yang baik hati.'},{text:'Amir ringan tulang membantu ibunya.'},{text:'Farah membawa buah tangan untuk nenek.'}]},
+ {id:'goo',place:'Pantai Goo Lagoon',npc:'Larry',x:1290,y:715,mx:1290,my:595,kind:'quiz',title:'Misi 4 · Membaca dan Memahami Ayat',dialog:'Selamat datang ke pantai! Baca ayat dengan teliti dan jawab soalan pemahaman.',items:[{text:'Walaupun penat selepas latihan, Hakim tetap ringan tulang membantu ayahnya membersihkan halaman rumah.',question:'Apakah sikap Hakim?',options:['Malas','Rajin membantu','Sombong'],answer:1},{text:'Ketika melawat nenek di kampung, Sara membawa buah tangan berupa kuih kegemaran neneknya.',question:'Apakah buah tangan yang dibawa Sara?',options:['Buku','Kuih','Bola'],answer:1},{text:'Azlan menjadi besar kepala selepas memenangi pertandingan dan tidak mahu mendengar nasihat rakannya.',question:'Apakah maksud besar kepala dalam ayat ini?',options:['Sombong','Baik hati','Rajin'],answer:0}]},
+ {id:'jelly',place:'Padang Obor-obor',npc:'Peneroka Obor-obor',x:330,y:635,mx:330,my:500,kind:'quiz',title:'Misi 5 · Membaca Dialog',dialog:'Hebat, kamu sudah sampai! Baca dialog ini dengan intonasi yang sesuai dan jawab soalannya.',items:[{text:'Aina: "Terima kasih kerana membantu saya mengangkat buku, Amir."\nAmir: "Sama-sama, Aina. Kita mestilah ringan tulang membantu kawan."',question:'Mengapakah Aina mengucapkan terima kasih?',options:['Amir membantunya mengangkat buku','Amir memberinya hadiah','Amir bermain bola'],answer:0},{text:'Ibu: "Kita akan melawat nenek petang ini."\nDina: "Baik, ibu. Bolehkah kita membawa buah tangan untuk nenek?"\nIbu: "Boleh, Dina. Nenek pasti gembira."',question:'Apakah cadangan Dina?',options:['Bermain di taman','Membawa buah tangan','Pergi ke sekolah'],answer:1}]}];
+const KEY='sibaca-local-adventure-v1';let completed=[];try{completed=JSON.parse(localStorage.getItem(KEY)||'[]').filter(id=>LESSON_DATA.some(m=>m.id===id));}catch{}completed=LESSON_DATA.filter(m=>completed.includes(m.id)).map(m=>m.id);let player={x:195,y:395},pressed=new Set(),nearby=null,modal=null,step=0,selected=null,recorded=false,mediaRecorder=null,chunks=[],recordUrl=null,recordStream=null,feedback='',listenDone=false;const canvas=document.getElementById('map'),ctx=canvas.getContext('2d'),mapImg=new Image();mapImg.src='assets/peta.png';const spriteImg=new Image();spriteImg.src='assets/spongebob-atlas.png';let facing='down',isWalking=false;
+// Kesan air: zon laut terbuka di bahagian bawah peta. Ubah koordinat jika peta berubah.
+function isInWater(x,y){
+  // Laut di bawah tebing kiri dan jambatan batu, serta laut di kanan jeti.
+  if(y>=920) return true;
+  if(y>=858 && x<475) return true;
+  if(y>=855 && x>1150) return true;
+  if(y>=885 && x>1050) return true;
+  return false;
+}
+let wasInWater=false,waterBubbles=[],waterSplashes=[];
+function spawnWaterBubble(x,y,burst=false){
+  const count=burst?13:2;
+  for(let i=0;i<count;i++) waterBubbles.push({
+    x:x+(Math.random()-.5)*(burst?85:48),
+    y:y-(burst?Math.random()*38:Math.random()*18),
+    r:2+Math.random()*(burst?9:5),
+    vy:35+Math.random()*60, vx:(Math.random()-.5)*24,
+    life:burst?1.1:1.5, maxLife:burst?1.1:1.5
+  });
+  if(waterBubbles.length>100)waterBubbles.splice(0,waterBubbles.length-100);
+}
+function drawWaterEffects(t){
+  const wet=isInWater(player.x,player.y);
+  if(!wet)return;
+  // Gelombang lembut di permukaan air sekitar kaki watak.
+  const phase=t/300;
+  ctx.save();ctx.translate(player.x,player.y-15);
+  for(let i=0;i<3;i++){
+    const r=25+i*13+3*Math.sin(phase+i);
+    ctx.beginPath();ctx.ellipse(0,0,r,6+i*2,0,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(205,250,255,${0.48-i*0.11})`;ctx.lineWidth=3-i*.4;ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawBubbles(delta){
+  ctx.save();
+  for(const b of waterBubbles){
+    b.y-=b.vy*delta;b.x+=b.vx*delta;b.life-=delta;
+    const alpha=Math.max(0,b.life/b.maxLife);
+    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(180,246,255,${alpha*.12})`;ctx.fill();
+    ctx.lineWidth=1.8;ctx.strokeStyle=`rgba(240,255,255,${alpha*.8})`;ctx.stroke();
+    ctx.beginPath();ctx.arc(b.x-b.r*.25,b.y-b.r*.3,Math.max(.7,b.r*.17),0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${alpha*.8})`;ctx.fill();
+  }
+  ctx.restore();
+  waterBubbles=waterBubbles.filter(b=>b.life>0);
+}
+let lastWaterDraw=performance.now();
+const $=id=>document.getElementById(id);const current=()=>LESSON_DATA[completed.length]||null;const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);function safe(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function refresh(){const m=current();$('stars').innerHTML=LESSON_DATA.map(x=>`<span class="star ${completed.includes(x.id)?'done':''}">${completed.includes(x.id)?'★':'☆'}</span>`).join('');$('banner').textContent=m?`⭐ MISI ${completed.length+1}/5 — Pergi ke ${m.place}!`:'🏆 TAHNIAH! Semua lima misi selesai!';$('missionList').innerHTML=LESSON_DATA.map((x,i)=>`<div class="mission ${completed.includes(x.id)?'done':i===completed.length?'current':''}"><span class="number">${completed.includes(x.id)?'✓':i>completed.length?'🔒':i+1}</span><span>${safe(x.place)}<br><small>${completed.includes(x.id)?'Selesai':i===completed.length?'Misi semasa':'Dikunci'}</small></span></div>`).join('');}
+
+// ANIMASI ALAM: obor-obor dan air terjun. Semua lukisan berada di atas kanvas peta.
+// Koordinat disesuaikan dengan peta 1536 x 1024.
+const JELLYFISH=[
+ {x:172,y:583,r:24,phase:0,color:'255,124,235'},
+ {x:254,y:620,r:23,phase:1.6,color:'255,135,246'},
+ {x:320,y:548,r:25,phase:3.2,color:'252,137,239'},
+ {x:422,y:586,r:24,phase:4.8,color:'255,132,241'}
+];
+function animateJellyfish(t){
+  const time=t/1000;
+  for(const j of JELLYFISH){
+    const pulse=Math.sin(time*2.4+j.phase);
+    const x=j.x+Math.sin(time*.85+j.phase)*6;
+    const y=j.y+Math.sin(time*1.4+j.phase)*9;
+    const scale=1+.045*pulse;
+    ctx.save();ctx.translate(x,y);ctx.scale(scale,1-.055*pulse);
+    // Sinar lembut menonjolkan pergerakan obor-obor yang dilukis dalam peta.
+    const halo=ctx.createRadialGradient(0,-5,5,0,0,j.r*1.65);
+    halo.addColorStop(0,`rgba(${j.color},0.25)`);
+    halo.addColorStop(1,`rgba(${j.color},0)`);
+    ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,j.r*1.65,0,Math.PI*2);ctx.fill();
+    // Kubah separa lut sinar supaya grafik asal kekal kelihatan.
+    ctx.beginPath();ctx.ellipse(0,-6,j.r*.88,j.r*.68,0,Math.PI,Math.PI*2);
+    ctx.quadraticCurveTo(j.r*.88,2,0,4);
+    ctx.quadraticCurveTo(-j.r*.88,2,-j.r*.88,-6);
+    ctx.closePath();
+    ctx.fillStyle=`rgba(${j.color},0.24)`;ctx.fill();
+    ctx.lineWidth=2.4;ctx.strokeStyle='rgba(255,209,255,0.57)';ctx.stroke();
+    // Sesungut melambai dengan fasa berbeza.
+    for(let k=-2;k<=2;k++){
+      const tx=k*7;
+      ctx.beginPath();ctx.moveTo(tx,4);
+      ctx.bezierCurveTo(tx+Math.sin(time*3+j.phase+k)*5,15,
+        tx+Math.sin(time*3.1+j.phase+k)*7,26,
+        tx+Math.sin(time*3.2+j.phase+k)*8,34+3*Math.sin(time*2+k));
+      ctx.strokeStyle=`rgba(${j.color},0.58)`;ctx.lineWidth=2.5;ctx.lineCap='round';ctx.stroke();
+    }
+    ctx.restore();
+  }
+  // Obor-obor kecil tambahan berenang di atas kolam.
+  const x=365+Math.sin(time*.58)*31,y=536+Math.sin(time*1.3)*13;
+  ctx.save();ctx.translate(x,y);ctx.globalAlpha=.77;
+  ctx.fillStyle='rgba(255,158,247,.52)';ctx.strokeStyle='rgba(255,230,255,.9)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.ellipse(0,0,12,9,0,Math.PI,Math.PI*2);ctx.lineTo(12,1);ctx.quadraticCurveTo(0,5,-12,1);ctx.closePath();ctx.fill();ctx.stroke();
+  for(let k=-1;k<=1;k++){ctx.beginPath();ctx.moveTo(k*6,2);ctx.quadraticCurveTo(k*6+Math.sin(time*3+k)*5,13,k*6+Math.sin(time*3+k)*6,21);ctx.stroke()}
+  ctx.restore();
+}
+function animateWaterfall(t){
+  const time=t/1000;
+  ctx.save();
+  // Air terjun di bawah pagar, di sebelah kiri gerbang batu.
+  // Klip mengelakkan aliran air melimpah ke batu atau pagar.
+  ctx.beginPath();ctx.moveTo(196,746);ctx.bezierCurveTo(218,751,244,748,277,754);
+  ctx.lineTo(269,836);ctx.bezierCurveTo(249,843,216,844,188,831);ctx.closePath();ctx.clip();
+  const fall=ctx.createLinearGradient(190,740,278,835);
+  fall.addColorStop(0,'rgba(169,255,255,.08)');
+  fall.addColorStop(.5,'rgba(88,230,255,.24)');
+  fall.addColorStop(1,'rgba(223,255,255,.33)');
+  ctx.fillStyle=fall;ctx.fillRect(180,738,115,110);
+  // Garisan air bergerak ke bawah secara berulang.
+  for(let i=0;i<16;i++){
+    const x=194+i*5.6;
+    const offset=(time*(90+(i%4)*15)+i*29)%118;
+    for(let n=-1;n<=1;n++){
+      const y=733+offset+n*118;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x-3,y+11,x+2,y+25,x-1,y+35);
+      ctx.lineWidth=i%3===0?3.3:1.6;
+      ctx.strokeStyle=`rgba(224,255,255,${i%3===0?.52:.32})`;ctx.stroke();
+    }
+  }
+  ctx.restore();
+  // Percikan dan buih di kaki air terjun.
+  for(let i=0;i<13;i++){
+    const phase=time*(1.1+i%3*.2)+i*1.91;
+    const x=194+i*6.3+Math.sin(phase*2)*3;
+    const y=833+Math.sin(phase*2.5)*5;
+    const r=1.8+(i%4)*.9;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(234,255,255,${.28+.28*(.5+.5*Math.sin(phase*4))})`;ctx.fill();
+  }
+  // Riak pada air tempat air terjun jatuh.
+  for(let i=0;i<3;i++){
+    const radius=22+i*16+((time*20)%16);
+    ctx.beginPath();ctx.ellipse(232,843,radius,5+i*2.5,0,0,Math.PI*2);
+    ctx.lineWidth=2;ctx.strokeStyle=`rgba(217,255,255,${.43-i*.11})`;ctx.stroke();
+  }
+}
+
+function draw(t){ctx.clearRect(0,0,1536,1024);if(mapImg.complete&&mapImg.naturalWidth)ctx.drawImage(mapImg,0,0,1536,1024);else{ctx.fillStyle='#36b8d3';ctx.fillRect(0,0,1536,1024)}animateWaterfall(t);animateJellyfish(t);LESSON_DATA.forEach((m,i)=>{let done=completed.includes(m.id),active=i===completed.length;ctx.save();ctx.translate(m.mx,m.my);if(active){ctx.beginPath();ctx.arc(0,0,47+5*Math.sin(t/250),0,Math.PI*2);ctx.fillStyle='#ffe35177';ctx.fill();}ctx.beginPath();ctx.arc(0,0,31,0,Math.PI*2);ctx.fillStyle=done?'#3dc978':active?'#ffc12c':'#81979f';ctx.fill();ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.stroke();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='bold 34px Arial';ctx.fillText(done?'✓':active?'★':'🔒',0,0);ctx.fillStyle='#fff9e5';ctx.fillRect(-53,37,106,29);ctx.fillStyle='#285568';ctx.font='bold 17px Arial';ctx.fillText(`MISI ${i+1}`,0,52);ctx.restore()});let m=current();if(m){let angle=Math.atan2(m.y-player.y,m.x-player.x);ctx.save();ctx.translate(player.x,player.y-124);ctx.rotate(angle+Math.PI/2);ctx.shadowColor='#fff3a3';ctx.shadowBlur=18;ctx.fillStyle='#ffd62e';ctx.strokeStyle='#815e21';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,-31);ctx.lineTo(22,15);ctx.lineTo(0,5);ctx.lineTo(-22,15);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()}const wet=isInWater(player.x,player.y);
+if(wet)drawWaterEffects(t);
+ctx.save();ctx.translate(player.x,player.y);
+if(wet){
+  // SpongeBob terapung perlahan; sedikit condong apabila berenang.
+  ctx.translate(0,Math.sin(t/270)*8);
+  if(isWalking)ctx.rotate(Math.sin(t/210)*0.055);
+}
+if(spriteImg.complete&&spriteImg.naturalWidth){const rows={down:[0,1],up:[2,3],left:[4,5],right:[6,7]};const row=rows[facing][isWalking?1:0];const frame=isWalking?Math.floor(t/95)%9:Math.floor(t/260)%6;const sw=144,sh=144;ctx.drawImage(spriteImg,frame*sw,row*sh,sw,sh,-65,-133,130,130);}else{ctx.fillStyle='#ffd52e';ctx.fillRect(-36,-110,72,100);ctx.fillStyle='#155a91';ctx.font='bold 18px Arial';ctx.textAlign='center';ctx.fillText('SiBaCa',0,-55);}ctx.restore();
+if(wet)drawSubmergedLegs(t);
+// Air menutupi kasut dan betis supaya SpongeBob kelihatan separuh tenggelam.
+function drawSubmergedLegs(t){
+  const x=player.x,y=player.y;
+  const bob=Math.sin(t/270)*8;
+  const surface=y-39+bob+Math.sin(t/220)*2;
+  ctx.save();
+  // Klip setempat: kesan air hanya meliputi bahagian kaki, bukan seluruh peta.
+  ctx.beginPath();
+  ctx.ellipse(x,surface+21,49,34,0,0,Math.PI*2);
+  ctx.clip();
+  const water=ctx.createLinearGradient(0,surface-5,0,surface+58);
+  water.addColorStop(0,'rgba(76,213,239,0.64)');
+  water.addColorStop(.5,'rgba(17,164,210,0.83)');
+  water.addColorStop(1,'rgba(7,117,179,0.91)');
+  ctx.fillStyle=water;
+  ctx.fillRect(x-55,surface,110,80);
+  // Garisan ombak di hadapan kaki; kaki kelihatan berada di belakang air.
+  ctx.beginPath();
+  for(let i=-47;i<=47;i+=3){
+    const yy=surface+Math.sin(i*.13+t/240)*2.7;
+    if(i===-47)ctx.moveTo(x+i,yy);else ctx.lineTo(x+i,yy);
+  }
+  ctx.strokeStyle='rgba(230,255,255,.88)';ctx.lineWidth=3.4;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(x,surface+11,37+Math.sin(t/230)*3,7,0,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,252,255,.44)';ctx.lineWidth=2;ctx.stroke();
+  ctx.restore();
+}
+const dtWater=Math.min((t-lastWaterDraw)/1000,.05);lastWaterDraw=t;
+drawBubbles(dtWater);requestAnimationFrame(draw)}
+// Zon halangan bangunan dan struktur peta (koordinat peta asal 1536 × 1024).
+// Gunakan titik kaki SpongeBob untuk perlanggaran supaya badan sprite boleh bertindih secara semula jadi.
+const BUILDING_BLOCKERS=[
+ {x:65,y:105,w:225,h:245},   // Rumah nanas SpongeBob
+ {x:420,y:185,w:255,h:175},  // Rumah Patrick
+ {x:775,y:165,w:270,h:195},  // Krusty Krab
+ {x:1145,y:205,w:295,h:210},// Rumah Sandy
+ {x:785,y:430,w:195,h:225},  // Rumah Squidward
+ {x:900,y:760,w:205,h:130},  // Struktur di pantai
+ {x:1440,y:615,w:80,h:250}   // Tepi kanan pantai
+];
+function isBlocked(x,y){
+ if(x<28||y<126||x>1508||y>1012)return true;
+ const footRadiusX=23,footRadiusY=8;
+ return BUILDING_BLOCKERS.some(b=>x+footRadiusX>b.x&&x-footRadiusX<b.x+b.w&&y+footRadiusY>b.y&&y-footRadiusY<b.y+b.h);
+}
+let last=performance.now();function tick(now){let dt=Math.min((now-last)/1000,.05);last=now;if(modal)isWalking=false;if(!modal){let dx=Number(pressed.has('right'))-Number(pressed.has('left')),dy=Number(pressed.has('down'))-Number(pressed.has('up'));isWalking=dx!==0||dy!==0;if(isWalking){facing=Math.abs(dx)>Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');}let mag=Math.hypot(dx,dy)||1;const inWaterBefore=isInWater(player.x,player.y);
+const speed=inWaterBefore?135:230; // Air lebih perlahan daripada darat.
+const stepX=dx/mag*speed*dt,stepY=dy/mag*speed*dt;const nextX=player.x+stepX,nextY=player.y+stepY;if(!isBlocked(nextX,player.y))player.x=nextX;if(!isBlocked(player.x,nextY))player.y=nextY;
+const nowWet=isInWater(player.x,player.y);
+if(nowWet&&!wasInWater)spawnWaterBubble(player.x,player.y-24,true);
+if(nowWet&&isWalking&&Math.random()<dt*8)spawnWaterBubble(player.x,player.y-16,false);
+wasInWater=nowWet;
+}let n=LESSON_DATA.find(m=>distance(player,m)<95)||null;if(n?.id!==nearby?.id){nearby=n;const allowed=n&&(completed.includes(n.id)||n.id===current()?.id);$('interact').classList.toggle('hidden',!allowed);if(allowed)$('interact').textContent=`BERCAKAP DENGAN ${n.npc.toUpperCase()}`;$('hint').textContent=n?`${n.place} — ${completed.includes(n.id)?'Misi selesai':n.id===current()?.id?'Tekan E / butang untuk bermula':'Selesaikan misi terdahulu'}`:'Ikut anak panah kuning ke checkpoint seterusnya!';}requestAnimationFrame(tick)}requestAnimationFrame(draw);requestAnimationFrame(tick);
+window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();let k={arrowup:'up',arrowdown:'down',arrowleft:'left',arrowright:'right',w:'up',a:'left',s:'down',d:'right'}[e.key.toLowerCase()];if(k)pressed.add(k);if(e.key.toLowerCase()==='e'&&!modal)interact();if(e.key==='Escape'&&modal)closeModal()});window.addEventListener('keyup',e=>{let k={arrowup:'up',arrowdown:'down',arrowleft:'left',arrowright:'right',w:'up',a:'left',s:'down',d:'right'}[e.key.toLowerCase()];if(k)pressed.delete(k)});document.querySelectorAll('[data-dir]').forEach(b=>{const k=b.dataset.dir;b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);pressed.add(k)});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>pressed.delete(k)))});$('interact').onclick=interact;$('reset').onclick=()=>{if(confirm('Padam semua bintang dan mulakan semula?')){completed=[];localStorage.removeItem(KEY);player={x:195,y:395};nearby=null;refresh()}};
+function interact(){if(!nearby)return;let index=LESSON_DATA.indexOf(nearby);if(index>completed.length)return;modal=nearby;step=-1;selected=null;feedback='';renderModal()}function closeModal(){stopRecording();if(window.speechSynthesis)window.speechSynthesis.cancel();modal=null;$('modalRoot').innerHTML='';pressed.clear()}function speak(text){if(!('speechSynthesis'in window)){alert('Fungsi suara tidak tersedia pada pelayar ini.');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='ms-MY';u.rate=.78;const voices=speechSynthesis.getVoices();let v=voices.find(x=>x.lang.toLowerCase()==='ms-my')||voices.find(x=>x.lang.toLowerCase().startsWith('ms'));if(v)u.voice=v;speechSynthesis.speak(u)}
+function renderModal(){if(!modal)return;let m=modal,done=completed.includes(m.id),item=m.items[step];let body='';if(step===-1){body=`<p class="speech">${safe(done?'Kamu telah menyelesaikan misi ini!':m.dialog)}</p><button class="btn yellow" id="start">${done?'MAIN SEMULA LATIHAN':'MULA MISI ✨'}</button>`}else if(step>=m.items.length){body=`<div class="speech">🎉 Syabas! Kamu berjaya menamatkan ${safe(m.title)}!<br>⭐ Bintang diperoleh!</div><button class="btn yellow" id="finish">KEMBALI KE PETA</button>`}else{let intro=`<div class="progress">Aktiviti ${step+1} daripada ${m.items.length}</div>`;let text=`<div class="speech" style="white-space:pre-line">${safe(item.text)}</div>`;if(m.kind==='read'){body=intro+text+`<div class="actions"><button class="btn" id="listen">🔊 Dengar contoh</button><button class="btn pink" id="record">🎙️ Mula rakam</button><button class="btn" id="play" ${recordUrl?'':'disabled'}>▶ Dengar rakaman</button></div><p class="recording" id="recstatus">${recorded?'Rakaman sudah dibuat. Dengar semula dan semak bacaan.':'Baca perkataan/ayat dengan jelas dan rakam suara.'}</p><label><input type="checkbox" id="selfcheck" ${recorded?'':'disabled'}> Saya sudah mendengar semula dan menyemak bacaan saya.</label><div class="actions"><button class="btn yellow" id="next" disabled>${step===m.items.length-1?'SELESAI MISI ⭐':'SETERUSNYA ➜'}</button></div>`}else if(m.kind==='match'){body=intro+`<p>Padankan perkataan untuk membina simpulan bahasa:</p><div class="speech">${safe(item.first)} + ?</div><div class="choices">${item.options.map((o,i)=>`<button class="choice ${selected===i?'selected':''}" data-option="${i}">${safe(o)}</button>`).join('')}</div>${feedback?`<div class="feedback">${safe(feedback)}</div>`:''}${selected!==null&&item.options[selected]===item.answer?`<div class="speech">${safe(item.text)}</div><div class="actions"><button class="btn" id="listen">🔊 Dengar frasa</button><button class="btn" id="meaning">💡 Maksud</button></div><p class="small">Baca frasa dengan kuat sebelum meneruskan.</p><label><input type="checkbox" id="selfcheck"> Saya sudah membaca frasa ini.</label><div class="actions"><button class="btn yellow" id="next" disabled>${step===m.items.length-1?'SELESAI MISI ⭐':'SETERUSNYA ➜'}</button></div>`:''}`;}else{body=intro+text+`<div class="actions"><button class="btn" id="listen">🔊 Dengar contoh bacaan</button></div><p class="small">Baca dengan suara yang jelas dan intonasi yang sesuai.</p><h3>${safe(item.question)}</h3><div class="choices">${item.options.map((o,i)=>`<button class="choice ${selected===i?'selected':''}" data-option="${i}">${safe(o)}</button>`).join('')}</div>${feedback?`<div class="feedback">${safe(feedback)}</div>`:''}<div class="actions"><button class="btn yellow" id="next" ${selected===item.answer?'':'disabled'}>${step===m.items.length-1?'SELESAI MISI ⭐':'SETERUSNYA ➜'}</button></div>`}}
+$('modalRoot').innerHTML=`<div class="overlay"><section class="modal" role="dialog" aria-modal="true"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><div class="small">${safe(m.place)} · ${safe(m.npc)}</div><h2>${safe(m.title)}</h2></div><button class="btn" id="close">✕</button></div>${body}</section></div>`;$('close').onclick=closeModal;if($('start'))$('start').onclick=()=>{step=0;selected=null;feedback='';recorded=false;renderModal()};if($('finish'))$('finish').onclick=closeModal;if($('listen'))$('listen').onclick=()=>speak(item.text);if($('meaning'))$('meaning').onclick=()=>{feedback=`Maksud: ${item.meaning}`;renderModal();speak(item.meaning)};document.querySelectorAll('[data-option]').forEach(b=>b.onclick=()=>{selected=Number(b.dataset.option);feedback=m.kind==='match'?(item.options[selected]===item.answer?'Betul! Hebat!':'Belum tepat. Cuba sekali lagi.'):(selected===item.answer?'Betul! Syabas!':'Cuba lagi. Baca ayat dengan teliti.');renderModal()});if($('selfcheck'))$('selfcheck').onchange=e=>{$('next').disabled=!e.target.checked};if($('record'))$('record').onclick=toggleRecording;if($('play'))$('play').onclick=()=>{if(recordUrl)new Audio(recordUrl).play()};if($('next'))$('next').onclick=()=>{stopRecording();step++;selected=null;feedback='';recorded=false;if(recordUrl){URL.revokeObjectURL(recordUrl);recordUrl=null}if(step>=m.items.length&&!completed.includes(m.id)){completed.push(m.id);localStorage.setItem(KEY,JSON.stringify(completed));refresh()}renderModal()}}
+async function toggleRecording(){if(mediaRecorder&&mediaRecorder.state==='recording'){mediaRecorder.stop();return}if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){alert('Rakaman memerlukan pelayar yang menyokong mikrofon, biasanya melalui HTTPS atau localhost.');return}try{recordStream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];mediaRecorder=new MediaRecorder(recordStream);mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mediaRecorder.onstop=()=>{if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(new Blob(chunks,{type:mediaRecorder.mimeType||'audio/webm'}));recorded=true;recordStream?.getTracks().forEach(t=>t.stop());recordStream=null;renderModal()};mediaRecorder.start();$('record').textContent='⏹️ Henti rakaman';$('recstatus').textContent='Sedang merakam suara...'}catch(e){alert('Akses mikrofon tidak dibenarkan. Sila benarkan mikrofon pada pelayar.')}}function stopRecording(){if(mediaRecorder?.state==='recording')mediaRecorder.stop();recordStream?.getTracks().forEach(t=>t.stop())}refresh();
+</script></body></html>
