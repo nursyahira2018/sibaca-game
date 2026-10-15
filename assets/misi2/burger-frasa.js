@@ -29,12 +29,20 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
   if (!root || !html || root.dataset.stableScroll) return;
   root.dataset.stableScroll = 'true';
   let revision = 0;
+  const pageKey = () => {
+    const progress = root.querySelector('.bf-ticket > span, .s3-progress, .g4-step, .maze-pill, .progress, .order-ticket');
+    if (progress) return 'activity:' + (progress.textContent.match(/\d+/)?.[0] || progress.textContent.trim());
+    if (root.querySelector('#bfStart, #s3Start, #g4Start, #mazeStart, #kstart, #start')) return 'intro';
+    if (root.querySelector('#bfFinish, #s3Finish, #g4Finish, #mazeFinish, #kfinish, #finish')) return 'finish';
+    return 'other';
+  };
   Object.defineProperty(root, 'innerHTML', {
     configurable: true,
     get() { return html.get.call(this); },
     set(markup) {
       const version = ++revision;
       const mission = typeof modal !== 'undefined' && modal ? modal.id : null;
+      const previousPage = pageKey();
       const nodes = Array.from(this.querySelectorAll('*'));
       const saved = nodes.filter(el => el.scrollTop || el.scrollLeft).map(el => ({
         id: el.id, classes: el.className, tag: el.tagName,
@@ -43,10 +51,15 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
       }));
       const focusId = this.contains(document.activeElement) ? document.activeElement.id : '';
       html.set.call(this, markup);
+      const samePage = previousPage === pageKey();
       const restore = () => {
         if (version !== revision || !this.firstElementChild ||
             (typeof modal !== 'undefined' && modal ? modal.id : null) !== mission) return;
         const fresh = Array.from(this.querySelectorAll('*'));
+        if (!samePage) {
+          fresh.forEach(el => { if (el.scrollTop) el.scrollTop = 0; if (el.scrollLeft) el.scrollLeft = 0; });
+          return;
+        }
         saved.forEach(state => {
           const el = state.id ? document.getElementById(state.id) :
             fresh.filter(n => n.tagName === state.tag && n.className === state.classes)[state.index];
@@ -56,7 +69,7 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
           }
         });
       };
-      if (focusId) {
+      if (samePage && focusId) {
         const control = document.getElementById(focusId);
         if (control && this.contains(control) && !control.disabled) control.focus({preventScroll: true});
       }
