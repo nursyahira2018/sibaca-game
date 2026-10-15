@@ -8,15 +8,15 @@ function fx(kind){if(!muted)kitchenSound(kind)}
 function reset(){filled=false;hasRead=false;busy=false;feedback=''}
 function ingredient(word,i){const icons=['🥬','🧀','🍅'];return `<button class="bf-ingredient" draggable="true" data-bf-word="${safe(word)}" aria-label="Tambah bahan ${safe(word)} ke burger"><span class="bf-food">${icons[i%3]}</span><strong>${safe(word)}</strong></button>`}
 function scene(){return `<div class="bf-scene"><div class="bf-sign">KRUSTY KRAB <small>DAPUR BURGER FRASA</small></div><div class="bf-chef"><img src="assets/misi2/encik-krabs.webp" alt="Encik Krabs menyambut chef kecil"><span>Encik Krabs</span></div><div class="bf-orders">${Array.from({length:5},(_,i)=>`<span class="${i<Math.max(0,order)?'bf-done':''}">${i<Math.max(0,order)?'🍔':'◯'}</span>`).join('')}</div><div class="bf-steam" aria-hidden="true">♨</div></div>`}
-function draw(){if(modal?.id!=='krusty')return;const item=modal.items[order];let body='';
+function draw(newPage=false){if(modal?.id!=='krusty')return;if(newPage)document.getElementById('modalRoot').dataset.resetScroll='true';const item=modal.items[order];let body='';
 if(order<0)body=`<div class="bf-talk"><strong>🦀 Encik Krabs</strong><p>${intro}</p></div><div class="bf-actions"><button id="bfIntro">🔊 Dengar arahan</button><button class="bf-gold" id="bfStart">👨‍🍳 JOM MASAK!</button></div><p class="bf-note">Tiada had masa. Kamu boleh hentikan tali sawat bila-bila masa.</p>`;
 else if(order>=modal.items.length)body='<div class="bf-talk"><div class="bf-trophy">🏆 🍔 ⭐</div><h2>Lima pesanan siap!</h2><p>Syabas, chef kecil! Kamu berjaya membina dan membaca lima frasa.</p></div><div class="bf-actions"><button class="bf-gold" id="bfFinish">KEMBALI KE PETA</button><button id="bfReplay">MAIN SEMULA</button></div>';
 else body=`<div class="bf-ticket"><span>🧾 PESANAN ${order+1} / ${modal.items.length}</span><strong>${safe(item.first)} + ${filled?safe(item.answer):'?'}</strong><small>${filled?'Padanan lengkap!':'Cari bahan yang melengkapkan frasa.'}</small></div><div class="bf-workspace"><section class="bf-belt-side"><h3>1. Cari bahan pesanan</h3><div class="bf-conveyor ${paused||filled?'bf-paused':''}" id="bfConveyor"><div class="bf-belt-items">${item.options.map(ingredient).join('')}</div><div class="bf-rollers" aria-hidden="true"></div></div><button class="bf-pause" id="bfPause">${paused?'▶ Gerakkan tali sawat':'⏸ Hentikan tali sawat'}</button><p class="bf-note">Seret bahan ke roti. Kamu juga boleh tekan bahan untuk menambahnya.</p></section><section class="bf-grill-side"><h3>2. Siapkan burger</h3><div class="bf-drop ${filled?'bf-filled':''}" id="bfDrop" role="region" aria-label="Letakkan bahan pada burger"><div class="bf-burger"><div class="bf-bun bf-top">${filled?'':'?'}</div>${filled?'<div class="bf-lettuce"></div><div class="bf-cheese"></div><div class="bf-patty"></div>':''}<div class="bf-bun bf-bottom"></div></div><div class="bf-plate"></div><strong>${filled?safe(item.text):safe(item.first)+' + ?'}</strong><span>${filled?'🍔 Burger siap!':'Letakkan bahan di sini'}</span></div></section></div><p class="bf-feedback" role="status">${safe(feedback||'Cari perkataan yang sesuai pada bahan burger.')}</p>${filled?`<div class="bf-read-card"><h3>3. Baca frasa dengan kuat</h3><div class="bf-big-phrase">${safe(item.text)}</div><div class="bf-actions"><button id="bfListen">🔊 Dengar frasa</button><button class="bf-pink" id="bfRead">${hasRead?'✓ Sudah dibaca':'Saya sudah membaca'}</button></div>${hasRead?`<div class="bf-meaning"><strong>💡 Maksud</strong><p>${safe(item.meaning)}</p><button id="bfMeaning">🔊 Dengar maksud</button></div><div class="bf-actions"><button class="bf-gold" id="bfServe">🍔 HANTAR PESANAN</button></div>`:''}</div>`:''}`;
 document.getElementById('modalRoot').innerHTML=`<div class="bf-overlay"><section class="bf-modal" role="dialog" aria-modal="true" aria-labelledby="bfTitle"><div class="bf-heading"><div><small>MISI 2 · KRUSTY KRAB</small><h2 id="bfTitle">Dapur Burger Frasa!</h2></div><div><button id="bfMute" aria-label="${muted?'Hidupkan':'Matikan'} bunyi">${muted?'🔇':'🔊'}</button><button id="bfClose" aria-label="Tutup misi">✕</button></div></div>${scene()}<main class="bf-content">${body}<p class="bf-note" id="bfVoiceStatus" role="status"></p></main></section></div>`;
-const by=id=>document.getElementById(id);by('bfClose').onclick=closeModal;by('bfMute').onclick=()=>{muted=!muted;stop();draw()};if(by('bfIntro'))by('bfIntro').onclick=()=>say('intro');const start=()=>{stop();order=0;reset();fx('tap');draw()};if(by('bfStart'))by('bfStart').onclick=start;if(by('bfReplay'))by('bfReplay').onclick=start;if(by('bfFinish'))by('bfFinish').onclick=closeModal;if(by('bfPause'))by('bfPause').onclick=()=>{paused=!paused;fx('tap');by('bfConveyor').classList.toggle('bf-paused',paused);by('bfPause').textContent=paused?'▶ Gerakkan tali sawat':'⏸ Hentikan tali sawat'};
+const by=id=>document.getElementById(id);by('bfClose').onclick=closeModal;by('bfMute').onclick=()=>{muted=!muted;stop();draw()};if(by('bfIntro'))by('bfIntro').onclick=()=>say('intro');const start=()=>{stop();order=0;reset();fx('tap');draw(true)};if(by('bfStart'))by('bfStart').onclick=start;if(by('bfReplay'))by('bfReplay').onclick=start;if(by('bfFinish'))by('bfFinish').onclick=closeModal;if(by('bfPause'))by('bfPause').onclick=()=>{paused=!paused;fx('tap');by('bfConveyor').classList.toggle('bf-paused',paused);by('bfPause').textContent=paused?'▶ Gerakkan tali sawat':'⏸ Hentikan tali sawat'};
 function add(word){if(filled||busy)return;if(word===item.answer){filled=true;feedback='Betul! Burger kamu sudah siap. Sekarang baca frasa!';fx('correct');draw();say('betul')}else{feedback='Bahan ini belum sesuai. Cuba bahan lain!';fx('retry');by('bfDrop').classList.remove('bf-shake');void by('bfDrop').offsetWidth;by('bfDrop').classList.add('bf-shake');document.querySelector('.bf-feedback').textContent=feedback;say('cuba-lagi')}}
 document.querySelectorAll('[data-bf-word]').forEach(b=>{b.onclick=()=>add(b.dataset.bfWord);b.ondragstart=e=>{e.dataTransfer.setData('text/plain',b.dataset.bfWord);e.dataTransfer.effectAllowed='copy';by('bfConveyor').classList.add('bf-paused')};b.ondragend=()=>{if(by('bfConveyor')&&!paused&&!filled)by('bfConveyor').classList.remove('bf-paused')};b.onpointerdown=e=>{if(e.pointerType==='mouse'||filled)return;b.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY,word:b.dataset.bfWord,moved:false,ghost:null};};b.onpointermove=e=>{if(!drag)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8){drag.moved=true;if(!drag.ghost){drag.ghost=b.cloneNode(true);drag.ghost.className='bf-drag-ghost';drag.ghost.removeAttribute('id');drag.ghost.setAttribute('aria-hidden','true');document.body.append(drag.ghost);by('bfConveyor').classList.add('bf-paused')}drag.ghost.style.left=e.clientX+'px';drag.ghost.style.top=e.clientY+'px'}};b.onpointerup=e=>{if(!drag)return;const d=drag;drag=null;d.ghost?.remove();if(d.moved){const r=by('bfDrop').getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom)add(d.word);if(by('bfConveyor')&&!paused&&!filled)by('bfConveyor').classList.remove('bf-paused')}};b.onpointercancel=()=>{drag?.ghost?.remove();drag=null}});
-if(by('bfDrop')){by('bfDrop').ondragover=e=>{e.preventDefault();by('bfDrop').classList.add('bf-hover')};by('bfDrop').ondragleave=()=>by('bfDrop').classList.remove('bf-hover');by('bfDrop').ondrop=e=>{e.preventDefault();add(e.dataTransfer.getData('text/plain'))}}if(by('bfListen'))by('bfListen').onclick=()=>say('frasa-'+(order+1));if(by('bfRead'))by('bfRead').onclick=()=>{hasRead=true;fx('tap');draw()};if(by('bfMeaning'))by('bfMeaning').onclick=()=>say('maksud-'+(order+1));if(by('bfServe'))by('bfServe').onclick=()=>{if(busy)return;busy=true;stop();by('bfServe').disabled=true;by('bfServe').textContent='🍔 Pesanan sedang dihantar…';document.querySelector('.bf-drop').classList.add('bf-serving');fx('correct');const servingOrder=order;setTimeout(()=>{if(modal?.id!=='krusty'||order!==servingOrder)return;order++;reset();if(order>=modal.items.length){if(!completed.includes('krusty')){completed.push('krusty');localStorage.setItem(KEY,JSON.stringify(completed));refresh()}fx('win');say('tamat')}draw()},750)};
+if(by('bfDrop')){by('bfDrop').ondragover=e=>{e.preventDefault();by('bfDrop').classList.add('bf-hover')};by('bfDrop').ondragleave=()=>by('bfDrop').classList.remove('bf-hover');by('bfDrop').ondrop=e=>{e.preventDefault();add(e.dataTransfer.getData('text/plain'))}}if(by('bfListen'))by('bfListen').onclick=()=>say('frasa-'+(order+1));if(by('bfRead'))by('bfRead').onclick=()=>{hasRead=true;fx('tap');draw()};if(by('bfMeaning'))by('bfMeaning').onclick=()=>say('maksud-'+(order+1));if(by('bfServe'))by('bfServe').onclick=()=>{if(busy)return;busy=true;stop();by('bfServe').disabled=true;by('bfServe').textContent='🍔 Pesanan sedang dihantar…';document.querySelector('.bf-drop').classList.add('bf-serving');fx('correct');const servingOrder=order;setTimeout(()=>{if(modal?.id!=='krusty'||order!==servingOrder)return;order++;reset();if(order>=modal.items.length){if(!completed.includes('krusty')){completed.push('krusty');localStorage.setItem(KEY,JSON.stringify(completed));refresh()}fx('win');say('tamat')}draw(true)},750)};
 }
 renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeModal=function(){if(modal?.id==='krusty'){stop();drag?.ghost?.remove();drag=null;order=-1;reset()}priorClose()};
 })();
@@ -43,6 +43,9 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
       const version = ++revision;
       const mission = typeof modal !== 'undefined' && modal ? modal.id : null;
       const previousPage = pageKey();
+      const resetScroll = this.dataset.resetScroll === 'true';
+      delete this.dataset.resetScroll;
+      const oldRootTop = this.scrollTop, oldRootLeft = this.scrollLeft;
       const nodes = Array.from(this.querySelectorAll('*'));
       const saved = nodes.filter(el => el.scrollTop || el.scrollLeft).map(el => ({
         id: el.id, classes: el.className, tag: el.tagName,
@@ -51,15 +54,18 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
       }));
       const focusId = this.contains(document.activeElement) ? document.activeElement.id : '';
       html.set.call(this, markup);
-      const samePage = previousPage === pageKey();
+      const samePage = !resetScroll && previousPage === pageKey();
       const restore = () => {
         if (version !== revision || !this.firstElementChild ||
             (typeof modal !== 'undefined' && modal ? modal.id : null) !== mission) return;
         const fresh = Array.from(this.querySelectorAll('*'));
         if (!samePage) {
-          fresh.forEach(el => { if (el.scrollTop) el.scrollTop = 0; if (el.scrollLeft) el.scrollLeft = 0; });
+          this.scrollTop = 0; this.scrollLeft = 0;
+          fresh.forEach(el => { el.scrollTop = 0; el.scrollLeft = 0; });
+          window.scrollTo({top:0,left:0,behavior:'instant'});
           return;
         }
+        this.scrollTop = oldRootTop; this.scrollLeft = oldRootLeft;
         saved.forEach(state => {
           const el = state.id ? document.getElementById(state.id) :
             fresh.filter(n => n.tagName === state.tag && n.className === state.classes)[state.index];
@@ -75,7 +81,7 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
       }
       restore();
       // Later mission wrappers may finish arranging their content in this frame.
-      requestAnimationFrame(restore);
+      requestAnimationFrame(() => { restore(); if (!samePage) requestAnimationFrame(restore); });
     }
   });
 })();
