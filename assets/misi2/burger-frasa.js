@@ -20,3 +20,49 @@ if(by('bfDrop')){by('bfDrop').ondragover=e=>{e.preventDefault();by('bfDrop').cla
 }
 renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeModal=function(){if(modal?.id==='krusty'){stop();drag?.ghost?.remove();drag=null;order=-1;reset()}priorClose()};
 })();
+
+
+// Keep each mission's viewport steady when its controls rebuild the dialog.
+(function preserveMissionScroll() {
+  const root = document.getElementById('modalRoot');
+  const html = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
+  if (!root || !html || root.dataset.stableScroll) return;
+  root.dataset.stableScroll = 'true';
+  let revision = 0;
+  Object.defineProperty(root, 'innerHTML', {
+    configurable: true,
+    get() { return html.get.call(this); },
+    set(markup) {
+      const version = ++revision;
+      const mission = typeof modal !== 'undefined' && modal ? modal.id : null;
+      const nodes = Array.from(this.querySelectorAll('*'));
+      const saved = nodes.filter(el => el.scrollTop || el.scrollLeft).map(el => ({
+        id: el.id, classes: el.className, tag: el.tagName,
+        index: nodes.filter(n => n.tagName === el.tagName && n.className === el.className).indexOf(el),
+        top: el.scrollTop, left: el.scrollLeft
+      }));
+      const focusId = this.contains(document.activeElement) ? document.activeElement.id : '';
+      html.set.call(this, markup);
+      const restore = () => {
+        if (version !== revision || !this.firstElementChild ||
+            (typeof modal !== 'undefined' && modal ? modal.id : null) !== mission) return;
+        const fresh = Array.from(this.querySelectorAll('*'));
+        saved.forEach(state => {
+          const el = state.id ? document.getElementById(state.id) :
+            fresh.filter(n => n.tagName === state.tag && n.className === state.classes)[state.index];
+          if (el && this.contains(el)) {
+            el.scrollTop = state.top;
+            el.scrollLeft = state.left;
+          }
+        });
+      };
+      if (focusId) {
+        const control = document.getElementById(focusId);
+        if (control && this.contains(control) && !control.disabled) control.focus({preventScroll: true});
+      }
+      restore();
+      // Later mission wrappers may finish arranging their content in this frame.
+      requestAnimationFrame(restore);
+    }
+  });
+})();
