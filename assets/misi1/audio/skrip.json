@@ -1,0 +1,15 @@
+{
+  "voice": "ms-MY-OsmanNeural",
+  "language": "ms-MY",
+  "texts": {
+    "masuk": "Jom masuk ke rumah Patrick!",
+    "intro": "Hai, kawan! Saya Patrick. Selamat datang ke rumah saya! Jom baca lima perkataan pada papan putih.",
+    "arahan": "Baca suku kata dan cantumkan menjadi perkataan. Tekan Dengar contoh untuk mendengar sebutan. Kemudian, tekan Mula rakam dan baca perkataan dengan jelas. Selepas merakam, dengar semula rakaman kamu. Tandakan kotak semakan, kemudian tekan Seterusnya.",
+    "hati": "Hati.",
+    "tulang": "Tulang.",
+    "tangan": "Tangan.",
+    "kepala": "Kepala.",
+    "kaki": "Kaki.",
+    "tamat": "Wah, hebatnya kamu! Kamu sudah selesai membaca lima perkataan. Tahniah! Jom teruskan pengembaraan!"
+  }
+}
