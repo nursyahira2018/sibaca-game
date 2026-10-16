@@ -9,11 +9,11 @@
     audio.src = tracks[track];
     sync();
   });
-  audio.preload = 'none';
+  audio.preload = 'auto';
+  audio.autoplay = true;
   audio.volume = 0.2;
-  const preferenceKey = 'sibaca-map-music-enabled';
-  let enabled = true, activated = false, pending = false, blocked = false;
-  try { enabled = localStorage.getItem(preferenceKey) !== 'false'; } catch (_) {}
+  // Start enabled on every new visit; browsers may require a first touch.
+  let enabled = true, activated = true, pending = false, blocked = false;
   const button = document.createElement('button');
   button.id = 'mapMusicToggle';
   button.type = 'button';
@@ -26,10 +26,10 @@
   const shouldPlay = () => enabled && activated && !inMission() && !document.hidden;
   function updateButton() {
     button.hidden = inMission();
-    button.textContent = !enabled ? '🔇 Muzik: tutup' : blocked ? '🎵 Mainkan muzik' : '🎵 Muzik: buka';
+    button.textContent = !enabled ? '🔇 Muzik: tutup' : '🎵 Muzik: buka';
     button.setAttribute('aria-pressed', String(enabled));
     button.setAttribute('aria-label', enabled ? 'Matikan muzik latar' : 'Hidupkan muzik latar');
-    if (blocked) button.setAttribute('aria-label', 'Mainkan muzik latar');
+    button.title = blocked ? 'Muzik akan bermula selepas sentuhan pertama dalam game.' : 'Buka atau tutup muzik latar';
   }
   function sync() {
     updateButton();
@@ -43,9 +43,8 @@
   }
   button.addEventListener('click', () => {
     activated = true;
-    if (blocked && enabled) blocked = false;
-    else enabled = !enabled;
-    try { localStorage.setItem(preferenceKey, String(enabled)); } catch (_) {}
+    enabled = !enabled;
+    blocked = false;
     sync();
   });
   // A trusted tap/key unlocks audio on mobile; keep the same playback position after missions.
@@ -66,5 +65,5 @@
   if (root) new MutationObserver(sync).observe(root, {childList: true, subtree: true});
   audio.addEventListener('playing', () => { if (!shouldPlay()) audio.pause(); });
   audio.addEventListener('error', () => { blocked = true; updateButton(); });
-  updateButton();
+  sync();
 })();
