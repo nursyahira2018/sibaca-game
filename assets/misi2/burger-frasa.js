@@ -36,6 +36,7 @@ function createReadingCheck(onChange) {
       if (!active() || failed) return;
       clearTimeout(timer); clearTimeout(endingTimer); recognizer = null;
       const matched = normalize(finalText) === expected;
+      if (matched) window.SiBaCaCorrectSound?.play();
       publish({phase:matched?'passed':'retry',transcript:finalText,
         message:matched?'Syabas! Perkataan yang dikesan sepadan dengan frasa. Kamu boleh hantar pesanan!':
           finalText?'Bacaan belum sepadan. Dengar contoh dan cuba baca sekali lagi.':'Suara belum dapat dikesan. Dekatkan mikrofon dan cuba lagi.'});
