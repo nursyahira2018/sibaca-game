@@ -21,6 +21,7 @@
  window.addEventListener('message',event=>{
   if(event.origin!==window.location.origin||!missionFrame||event.source!==missionFrame.contentWindow||modal?.id!=='jelly')return;
   const data=event.data;if(!data||data.app!=='sibaca-misi5')return;
+  if(data.type==='answer'){if(['pink','blue','purple','red'].includes(data.mode)&&Number.isInteger(data.index))window.SiBaCaResults?.recordDialog(data.mode,data.index,data.answer);return}
   if(data.type==='close'){closeModal();return}
   if(data.type==='completed'&&['pink','blue','purple','red'].includes(data.mode)){
    if(!completed.includes('jelly')){

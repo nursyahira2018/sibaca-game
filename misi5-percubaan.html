@@ -224,7 +224,7 @@ function bind(){
  if(by('goVocab'))by('goVocab').onclick=()=>{if(verified.size===mode.dialog.length)go('vocab')};
  if(by('backRead'))by('backRead').onclick=()=>go('read');
  if(by('beginQuiz'))by('beginQuiz').onclick=()=>{if(verified.size!==mode.dialog.length)return;question=0;chosen=null;feedback='';quizSolved=false;go('quiz')};
- document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{if(quizSolved)return;const q=mode.questions[question];chosen=Number(b.dataset.answer);quizSolved=chosen===q.answer;if(quizSolved)window.SiBaCaCorrectSound?.play();feedback=quizSolved?'✓ Betul! '+q.explain:'Belum tepat. Rujuk dialog dan cuba sekali lagi.';const y=window.scrollY;render();window.scrollTo({top:y,behavior:'instant'})});
+ document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{if(quizSolved)return;const q=mode.questions[question];chosen=Number(b.dataset.answer);if(embedded)window.parent.postMessage({app:'sibaca-misi5',type:'answer',mode:mode.id,index:question,answer:chosen},window.location.origin);quizSolved=chosen===q.answer;if(quizSolved)window.SiBaCaCorrectSound?.play();feedback=quizSolved?'✓ Betul! '+q.explain:'Belum tepat. Rujuk dialog dan cuba sekali lagi.';const y=window.scrollY;render();window.scrollTo({top:y,behavior:'instant'})});
  if(by('reviewDialog'))by('reviewDialog').onclick=()=>{reviewReturn='quiz';go('read')};
  if(by('nextQuestion'))by('nextQuestion').onclick=()=>{if(!quizSolved)return;if(question===3){try{localStorage.setItem('sibaca-misi5-preview-'+mode.id,JSON.stringify({completed:true,date:new Date().toISOString()}))}catch(_){}notify('completed');go('result')}else{question++;chosen=null;feedback='';quizSolved=false;go('quiz')}};
  if(by('playAgain'))by('playAgain').onclick=()=>go('modes');
