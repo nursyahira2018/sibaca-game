@@ -3,6 +3,6 @@
 
 /* Keep map actions together; hidden mission actions take no space. */
 #mapActionControls{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;flex-direction:column;gap:7px;width:156px}
-#mapActionControls #interact,#mapActionControls #homeMapReturn,#mapActionControls #allMissionSound{position:static;inset:auto;margin:0;width:100%;max-width:none;min-height:44px;padding:7px 10px;border-width:2px;border-radius:12px;font:900 13px/1.25 Nunito,Arial,sans-serif;box-shadow:0 3px 0 #06384966}
+#mapActionControls #finishEnterButton,#mapActionControls #interact,#mapActionControls #homeMapReturn,#mapActionControls #allMissionSound{position:static;inset:auto;margin:0;width:100%;max-width:none;min-height:44px;padding:7px 10px;border-width:2px;border-radius:12px;font:900 13px/1.25 Nunito,Arial,sans-serif;box-shadow:0 3px 0 #06384966}
 body.menu-open #mapActionControls{display:none}
-@media(max-width:600px){#mapActionControls{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));width:140px;gap:6px}#mapActionControls #interact,#mapActionControls #homeMapReturn,#mapActionControls #allMissionSound{font-size:12px;padding:6px 8px}}
+@media(max-width:600px){#mapActionControls{right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));width:140px;gap:6px}#mapActionControls #finishEnterButton,#mapActionControls #interact,#mapActionControls #homeMapReturn,#mapActionControls #allMissionSound{font-size:12px;padding:6px 8px}}
