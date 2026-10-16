@@ -84,7 +84,7 @@ body.map-fullscreen .map-fullscreen-toggle{top:16px;right:20px}
 </style><link rel="stylesheet" href="assets/misi3/sandy.css?v=robot3"><link rel="stylesheet" href="assets/penamat/finish.css?v=layout-303ca1b"><style id="mission1-word-pictures">.pat-board .pat-word-picture{display:block;width:clamp(120px,18vw,200px);height:clamp(120px,18vw,200px);object-fit:contain;margin:6px auto 0;border-radius:18px;background:#fff}.pat-board:has(.pat-word-picture) .speech{padding:6px 0;margin:4px 0}.pat-board:has(.pat-word-picture) .pat-instruction{margin:8px 0 0}@media(max-width:600px){.pat-board .pat-word-picture{width:130px;height:130px}}@media(max-height:500px){.pat-board .pat-word-picture{width:110px;height:110px}}</style><link rel="stylesheet" href="assets/start-menu.css?v=spongebob-gary1">
 <link rel="stylesheet" href="assets/sentence-reading.css?v=1">
 <script src="assets/sentence-reading.js?v=1"></script>
-</head><body>
+<style id="landscape-reminder-style">#startForm .landscape-reminder{display:flex;align-items:center;justify-content:center;gap:9px;margin:18px 0 0;padding:12px 14px;background:#fff2b7;border:2px solid #efd16d;border-radius:14px;color:#5d4a13;font:900 13px/1.5 Nunito,Arial,sans-serif;text-align:center}#startForm .landscape-reminder span{flex:none;font-size:24px}@media(max-width:600px){#startForm .landscape-reminder{font-size:12px;padding:11px 12px;gap:8px}}</style></head><body>
 <div id="startMenu" role="dialog" aria-modal="true" aria-labelledby="startTitle">
   <div class="start-bubbles" aria-hidden="true"><span style="--left:8%;--size:30px;--duration:13s;--delay:-4s"></span><span style="--left:25%;--size:53px;--duration:17s;--delay:-10s"></span><span style="--left:69%;--size:24px;--duration:11s;--delay:-2s"></span><span style="--left:86%;--size:44px;--duration:15s;--delay:-8s"></span><span style="--left:50%;--size:16px;--duration:10s;--delay:-6s"></span></div>
   <form class="start-card" id="startForm">
@@ -96,6 +96,7 @@ body.map-fullscreen .map-fullscreen-toggle{top:16px;right:20px}
     <input id="studentName" name="studentName" type="text" maxlength="60" autocomplete="name" placeholder="Contoh: Aina" required>
     <label for="studentClass">🏫 Nama kelas</label>
     <input id="studentClass" name="studentClass" type="text" maxlength="40" placeholder="Contoh: 5 Bestari" required>
+    <p id="landscapeReminder" class="landscape-reminder" role="note"><span aria-hidden="true">📱 ↔️</span> PUTARKAN PERANTI KEPADA MOD LANDSKAP UNTUK PAPARAN YANG LEBIH JELAS</p>
     <button class="start-go" type="submit">⭐ MULA PENGEMBARAAN! ⭐</button>
     <p class="start-note">Nama dan kelas disimpan pada peranti ini sahaja. Tidak dihantar ke pelayan.</p>
   </form>
