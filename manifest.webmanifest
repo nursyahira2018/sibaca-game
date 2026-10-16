@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "SiBaCa — Pengembaraan Membaca Bikini Bottom",
+  "short_name": "SiBaCa",
+  "description": "Permainan inovasi kemahiran membaca Bahasa Melayu",
+  "lang": "ms",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#a8f0f5",
+  "theme_color": "#087f9b",
+  "icons": [
+    {
+      "src": "icons/sibaca.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
