@@ -1,0 +1,20 @@
+/* Spacious, playful welcome screen with a readable desktop scale. */
+#startMenu{padding:28px 20px}
+.start-card{width:min(760px,100%);padding:26px 42px 24px;border-radius:38px;background:radial-gradient(ellipse at 50% 0,#fff8c9 0,transparent 55%),linear-gradient(145deg,#fffef4,#defaff);border:6px solid #fff;box-shadow:0 12px 0 #078bac,0 25px 65px #00325c99}
+.start-pill{font-size:15px;padding:7px 20px;letter-spacing:.5px}
+.start-card h2{display:flex;align-items:center;justify-content:center;gap:16px;margin:12px 0 8px;font-family:'Baloo 2',Nunito,Arial,sans-serif;font-size:clamp(72px,8.5vw,118px);font-weight:1000;line-height:1.12;letter-spacing:-4px;color:#117fa9;text-shadow:none}
+.start-title-fruit{font-size:.65em;letter-spacing:0;filter:drop-shadow(0 5px 0 #cf8d2460);transform:rotate(-10deg)}
+.start-title-word{display:inline-flex;filter:drop-shadow(0 5px 0 #075477);white-space:nowrap}
+.start-title-word span{-webkit-text-stroke:2px #fff;paint-order:stroke fill;text-shadow:0 2px 0 #fff,2px 0 0 #fff,-2px 0 0 #fff,0 -2px 0 #fff}
+.start-title-word .title-si{color:#00a4d6;transform:rotate(-5deg)}
+.start-title-word .title-ba{color:#f65d70;transform:translateY(-3px) rotate(3deg)}
+.start-title-word .title-ca{color:#ffbd19;transform:rotate(-3deg)}
+.start-card .start-sub{font-size:clamp(20px,2.2vw,27px);line-height:1.25;margin:4px 0 10px;color:#076a8b}
+.start-card .start-desc{font-size:18px;line-height:1.4;margin:0 auto 16px;max-width:570px}
+.start-card label{font-size:18px;margin:12px 0 6px}
+.start-card input{font-size:21px;padding:13px 18px;border-radius:17px}
+.start-go{font-size:25px;padding:14px 18px;margin-top:20px;border-radius:20px}
+.start-card .start-note{font-size:12px;line-height:1.4;margin-top:12px}
+@media(min-width:761px) and (min-height:850px){.start-card{padding:36px 50px}.start-card h2{margin:20px 0 14px;font-size:128px}.start-card .start-desc{margin-bottom:24px}.start-card input{padding:17px 18px}.start-go{margin-top:26px;padding:18px}}
+@media(max-width:600px){#startMenu{padding:20px 14px}.start-card{padding:22px 18px;border-radius:28px}.start-pill{font-size:10px;padding:7px 9px;letter-spacing:0}.start-card h2{font-size:clamp(60px,14vw,84px);gap:8px;letter-spacing:-3px}.start-card .start-sub{font-size:20px}.start-card .start-desc{font-size:15px}.start-card label{font-size:16px}.start-card input{font-size:18px}.start-go{font-size:19px;padding:14px 8px}.start-card .start-note{font-size:10px}}
+@media(max-height:700px) and (min-width:601px){#startMenu{align-items:start;padding:18px}.start-card{padding:18px 36px}.start-card h2{font-size:84px;margin:6px 0}.start-card .start-desc{margin-bottom:8px}.start-card label{margin-top:8px}.start-card input{padding:10px 16px}.start-go{margin-top:14px;padding:11px 16px}}
