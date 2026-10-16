@@ -9,9 +9,9 @@
  renderModal=function(...args){
   if(modal?.id!=='jelly')return previousRender.apply(this,args);
   if(missionFrame?.isConnected)return;
-  root.innerHTML='<section class="m5-integrated" role="dialog" aria-modal="true" aria-label="Misi 5 — Padang Obor-obor"><div class="m5-integrated-bar"><span>🪼 Misi 5 · Padang Obor-obor</span><button class="m5-integrated-close" id="m5ReturnMap" type="button">✕ Kembali ke peta</button></div><iframe id="m5DialogFrame" title="Pengembaraan Dialog — Misi 5" allow="microphone; autoplay" src="misi5-percubaan.html?embedded=1&amp;v=ali-audio-51842b3"></iframe></section>';
+  root.innerHTML='<section class="m5-integrated" role="dialog" aria-modal="true" aria-label="Misi 5 — Padang Obor-obor"><div class="m5-integrated-bar"><span>🪼 Misi 5 · Padang Obor-obor</span><button class="m5-integrated-close" id="m5ReturnMap" type="button">✕ Kembali ke peta</button></div><iframe id="m5DialogFrame" title="Pengembaraan Dialog — Misi 5" allow="microphone; autoplay" src="misi5-percubaan.html?embedded=1&amp;v=red-audio-complete-v2"></iframe></section>';
   missionFrame=document.getElementById('m5DialogFrame');
-  missionFrame.src='misi5-percubaan.html?embedded=1&v=ali-audio-51842b3&t='+Date.now();
+  missionFrame.src='misi5-percubaan.html?embedded=1&v=red-audio-complete-v2&t='+Date.now();
   document.getElementById('m5ReturnMap').onclick=()=>closeModal();
  };
  closeModal=function(...args){
