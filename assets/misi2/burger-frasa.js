@@ -53,8 +53,8 @@ function createReadingCheck(onChange) {
     };
     try {
       recognizer = new Recognition();
-      recognizer.lang = 'ms-MY'; recognizer.continuous = true;
-      recognizer.interimResults = true; recognizer.maxAlternatives = 1;
+      recognizer.lang = 'ms-MY'; recognizer.continuous = false;
+      recognizer.interimResults = false; recognizer.maxAlternatives = 1;
       recognizer.onstart = () => {
         if (!active()) return;
         publish({phase:'listening',message:'Saya sedang mendengar. Baca frasa pada skrin.'});
@@ -66,8 +66,11 @@ function createReadingCheck(onChange) {
           const result = event.results[i];
           (result.isFinal ? finals : interim).push(result[0].transcript);
         }
-        finalText = finals.join(' ').trim();
-        publish({transcript:[finalText,...interim].filter(Boolean).join(' ')});
+        // A short, single utterance uses the latest complete hypothesis.
+        // Some mobile engines return 'baik', then 'baik hati' as cumulative results.
+        // Joining those hypotheses would incorrectly produce 'baik baik hati'.
+        if (finals.length) finalText = finals[finals.length - 1].trim();
+        publish({transcript:finals.length ? finalText : (interim[interim.length - 1] || finalText)});
         // Only final results can unlock the activity. Interim guesses never pass.
         if (normalize(finalText).split(' ').length >= expected.split(' ').length && finalText) end();
       };
@@ -205,3 +208,4 @@ renderModal=function(){if(modal?.id==='krusty')draw();else priorRender()};closeM
 .bf-voice-help{font-size:15px;line-height:1.6;text-align:left;margin:14px auto;max-width:720px}
 .bf-voice-help summary{cursor:pointer;font-weight:800}#bfRecord:disabled,#bfListen:disabled{opacity:.65;cursor:default}
 `;document.head.append(style)})();
+
