@@ -1,5 +1,5 @@
 /* SiBaCa PWA: prefer online updates; offline fallback for previously visited local files. */
-const CACHE = 'sibaca-pwa-2026-10-16-v1';
+const CACHE = 'sibaca-pwa-2026-10-17-controls-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/sibaca.svg'];
 self.addEventListener('install', event => {event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate', event => {event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('sibaca-pwa-')&&key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()]));});

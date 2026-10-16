@@ -21,3 +21,16 @@ home.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden){
 const returnButton=document.createElement('button');returnButton.id='homeMapReturn';returnButton.type='button';returnButton.textContent='🍍 MENU UTAMA';returnButton.onclick=openHome;document.body.append(returnButton);
 window.SiBaCaHome={open:openHome};
 })();
+
+(() => {
+  const map = document.querySelector('.mapbox');
+  const mission = document.getElementById('interact');
+  const menu = document.getElementById('homeMapReturn');
+  const sound = document.getElementById('allMissionSound');
+  if (!map || !mission || !menu || !sound) return;
+  const controls = document.createElement('nav');
+  controls.id = 'mapActionControls';
+  controls.setAttribute('aria-label', 'Kawalan peta');
+  controls.append(mission, menu, sound);
+  map.append(controls);
+})();
