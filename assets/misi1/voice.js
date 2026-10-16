@@ -3,7 +3,7 @@
   'use strict';
   const root = document.getElementById('modalRoot');
   const priorRender = renderModal, priorClose = closeModal;
-  let active = null, session = 0, release = null, previousStep = null;
+  let active = null, cheer = null, session = 0, release = null, previousStep = null;
   const inMission = () => modal?.id === 'patrick';
   function status(message) {
     const target = document.getElementById('patVoiceStatus');
@@ -11,9 +11,19 @@
   }
   function stop() {
     session++;
+    if (cheer) { cheer.pause(); cheer.currentTime = 0; cheer = null; }
     if (active) { active.pause(); active.onended = null; active.onerror = null; active = null; }
     if (release) { const resolve = release; release = null; resolve(); }
     if (inMission()) window.speechSynthesis?.cancel();
+  }
+  function playCheer(token) {
+    const effect = new Audio('assets/misi1/audio/kids-cheering.mp3');
+    effect.volume = 0.25;
+    cheer = effect;
+    effect.onended = () => { if (cheer === effect) cheer = null; };
+    Promise.resolve(effect.play()).then(() => {
+      if (token !== session || !inMission() || document.hidden) effect.pause();
+    }).catch(() => {});
   }
   async function say(keys) {
     stop();
@@ -31,6 +41,7 @@
         clip.onerror = () => { failed = true; status('Audio belum dapat dimainkan. Tekan butang dengar untuk cuba semula.'); done(); };
         Promise.resolve(clip.play()).then(() => {
           if (token !== session || !inMission() || document.hidden) { clip.pause(); done(); }
+          else if (key === 'tamat') playCheer(token);
         }).catch(() => { failed = true; if (token === session) status('Tekan butang dengar untuk memainkan audio.'); done(); });
       });
       if (active === clip) active = null;
