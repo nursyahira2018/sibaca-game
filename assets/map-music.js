@@ -23,7 +23,8 @@
   document.body.append(button);
   const root = document.getElementById('modalRoot');
   const inMission = () => !!modal || !!root?.childElementCount || !!document.getElementById('patEntrance');
-  const shouldPlay = () => enabled && activated && !inMission() && !document.hidden;
+  const pauses = new Set();
+  const shouldPlay = () => pauses.size === 0 && enabled && activated && !inMission() && !document.hidden;
   function updateButton() {
     button.hidden = inMission();
     button.textContent = !enabled ? '🔇 Muzik: tutup' : '🎵 Muzik: buka';
@@ -39,7 +40,7 @@
     Promise.resolve(audio.play()).then(() => {
       blocked = false;
       if (!shouldPlay()) audio.pause();
-    }).catch(() => { blocked = true; }).finally(() => { pending = false; updateButton(); });
+    }).catch(() => { blocked = true; }).finally(() => { pending = false; updateButton(); if (shouldPlay() && audio.paused && !blocked) sync(); });
   }
   button.addEventListener('click', () => {
     activated = true;
@@ -65,5 +66,6 @@
   if (root) new MutationObserver(sync).observe(root, {childList: true, subtree: true});
   audio.addEventListener('playing', () => { if (!shouldPlay()) audio.pause(); });
   audio.addEventListener('error', () => { blocked = true; updateButton(); });
+  window.SiBaCaMusic = {setPaused(reason, paused) { if (paused) pauses.add(reason); else pauses.delete(reason); sync(); }};
   sync();
 })();
