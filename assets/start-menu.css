@@ -18,3 +18,8 @@
 @media(min-width:761px) and (min-height:850px){.start-card{padding:36px 50px}.start-card h2{margin:20px 0 14px;font-size:128px}.start-card .start-desc{margin-bottom:24px}.start-card input{padding:17px 18px}.start-go{margin-top:26px;padding:18px}}
 @media(max-width:600px){#startMenu{padding:20px 14px}.start-card{padding:22px 18px;border-radius:28px}.start-pill{font-size:10px;padding:7px 9px;letter-spacing:0}.start-card h2{font-size:clamp(60px,14vw,84px);gap:8px;letter-spacing:-3px}.start-card .start-sub{font-size:20px}.start-card .start-desc{font-size:15px}.start-card label{font-size:16px}.start-card input{font-size:18px}.start-go{font-size:19px;padding:14px 8px}.start-card .start-note{font-size:10px}}
 @media(max-height:700px) and (min-width:601px){#startMenu{align-items:start;padding:18px}.start-card{padding:18px 36px}.start-card h2{font-size:84px;margin:6px 0}.start-card .start-desc{margin-bottom:8px}.start-card label{margin-top:8px}.start-card input{padding:10px 16px}.start-go{margin-top:14px;padding:11px 16px}}
+
+/* Uploaded transparent SpongeBob and Gary reading illustration. */
+.start-title-friends{display:block;width:clamp(150px,20vw,225px);height:auto;object-fit:contain;flex:none;filter:drop-shadow(0 4px 3px #087a9920)}
+@media(max-width:600px){.start-card h2{gap:4px;font-size:clamp(50px,12vw,72px)}.start-title-friends{width:clamp(105px,29vw,160px)}}
+@media(max-height:700px) and (min-width:601px){.start-title-friends{width:170px}}
