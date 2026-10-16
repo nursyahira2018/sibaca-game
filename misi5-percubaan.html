@@ -40,7 +40,9 @@ function createReadingCheck(onChange) {
       return;
     }
     if (!expected) { publish({phase:'error',transcript:'',message:'Frasa belum tersedia. Buka semula misi.'}); return; }
-    let finalText = '', failed = false, ending = false;
+    let finalText = '', completedText = '', failed = false, ending = false;
+    let restartTimer = null;
+    const join = (a, b) => [a, b].filter(Boolean).join(' ').trim();
     const active = () => token === session;
     const fail = message => {
       if (!active()) return;
@@ -69,11 +71,11 @@ function createReadingCheck(onChange) {
     };
     try {
       recognizer = new Recognition();
-      recognizer.lang = 'ms-MY'; recognizer.continuous = false;
+      recognizer.lang = 'ms-MY'; recognizer.continuous = true;
       recognizer.interimResults = false; recognizer.maxAlternatives = 1;
       recognizer.onstart = () => {
         if (!active()) return;
-        publish({phase:'listening',message:'Saya sedang mendengar. Baca frasa pada skrin.'});
+        publish({phase:'listening',message:'Saya sedang mendengar. Baca seluruh baris dialog. Berhenti seketika pada tanda noktah dibenarkan.'});
       };
       recognizer.onresult = event => {
         if (!active() || failed) return;
@@ -82,16 +84,16 @@ function createReadingCheck(onChange) {
           const result = event.results[i];
           (result.isFinal ? finals : interim).push(result[0].transcript);
         }
-        // A short, single utterance uses the latest complete hypothesis.
-        // Some mobile engines return 'baik', then 'baik hati' as cumulative results.
-        // Joining those hypotheses would incorrectly produce 'baik baik hati'.
-        if (finals.length) finalText = finals[finals.length - 1].trim();
-        publish({transcript:finals.length ? finalText : (interim[interim.length - 1] || finalText)});
+        // Results belong to this recognition run; rebuild them without duplicating
+        // earlier events, and retain completed runs across browser silence stops.
+        finalText = join(completedText, finals.join(' '));
+        publish({transcript:join(finalText, interim.join(' '))});
         // Only final results can unlock the activity. Interim guesses never pass.
-        if (normalize(finalText).split(' ').length >= expected.split(' ').length && finalText) end();
+        if (normalize(finalText) === expected) end();
       };
       recognizer.onerror = event => {
         if (!active()) return;
+        if (event.error === 'no-speech' && !ending) return;
         const messages = {
           'not-allowed':'Mikrofon belum dibenarkan. Benarkan mikrofon pada tetapan pelayar, kemudian cuba lagi.',
           'service-not-allowed':'Perkhidmatan suara tidak dibenarkan. Cuba buka pautan terus dalam Chrome.',
@@ -103,10 +105,20 @@ function createReadingCheck(onChange) {
         };
         fail(messages[event.error] || 'Bacaan belum dapat disemak. Cuba sekali lagi.');
       };
-      recognizer.onend = finish;
+      recognizer.onend = () => {
+        if (!active() || failed) return;
+        if (ending) { finish(); return; }
+        completedText = finalText;
+        publish({phase:'listening',message:'Teruskan bacaan. Kamu boleh berhenti seketika pada tanda noktah.'});
+        restartTimer = setTimeout(() => {
+          if (!active() || failed || ending) return;
+          try { recognizer.start(); }
+          catch (_) { fail('Mikrofon tidak dapat disambung. Tekan mikrofon untuk mencuba semula.'); }
+        }, 200);
+      };
       publish({phase:'starting',transcript:'',message:'Benarkan mikrofon jika diminta. Bersedia untuk membaca…'});
       recognizer.start();
-      timer = setTimeout(end, 60000);
+      timer = setTimeout(end, 180000);
     } catch (_) { fail('Mikrofon tidak dapat dimulakan. Tutup aplikasi yang menggunakan mikrofon dan cuba lagi.'); }
     return end;
   }
