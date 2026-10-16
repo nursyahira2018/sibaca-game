@@ -3,6 +3,25 @@
  const finishPoint={x:882,y:696},root=document.getElementById('modalRoot');
  const previousClose=closeModal,previousRender=renderModal,previousRefresh=refresh,previousDraw=draw;
  let latch=false,view='welcome',voice=null;
+ const finishMusic=new Audio('assets/penamat/hawaiian-train.mp3');
+ finishMusic.loop=true;finishMusic.preload='auto';finishMusic.volume=.25;
+ let finishMusicEnabled=true,musicPending=false;
+ const musicAllowed=()=>finishMusicEnabled&&modal?.id==='finish'&&!document.hidden;
+ function syncFinishMusic(){
+  if(!musicAllowed()){finishMusic.pause();return}
+  if(!finishMusic.paused||musicPending)return;
+  musicPending=true;
+  Promise.resolve(finishMusic.play()).then(()=>{if(!musicAllowed())finishMusic.pause()}).catch(()=>{}).finally(()=>{musicPending=false});
+ }
+ function stopFinishMusic(){finishMusic.pause();finishMusic.currentTime=0}
+ document.addEventListener('visibilitychange',syncFinishMusic);
+ document.addEventListener('pointerdown',()=>queueMicrotask(syncFinishMusic));
+ document.addEventListener('keydown',()=>queueMicrotask(syncFinishMusic));
+ window.addEventListener('pagehide',()=>finishMusic.pause());
+ window.addEventListener('pageshow',syncFinishMusic);
+ finishMusic.addEventListener('playing',()=>{if(!musicAllowed())finishMusic.pause()});
+ new MutationObserver(()=>{if(modal?.id!=='finish'||!root.childElementCount)finishMusic.pause()}).observe(root,{childList:true});
+
  const resultKey=()=> 'sibaca-results-v1:'+JSON.stringify(studentProfile?[studentProfile.name,studentProfile.className]:['tetamu']);
  function getResults(){try{return JSON.parse(localStorage.getItem(resultKey())||'{}')}catch(e){return {}}}
  function saveResults(results){try{localStorage.setItem(resultKey(),JSON.stringify(results))}catch(e){}}
@@ -10,8 +29,8 @@
  const allDone=()=>LESSON_DATA.every(m=>completed.includes(m.id));
  function metrics(){const r=getResults();const questions=LESSON_DATA.filter(m=>['goo','jelly'].includes(m.id)).flatMap(m=>m.items.map((q,i)=>({mission:m.title,id:m.id,index:i,text:q.question,result:r[m.id+':'+i]})));return {questions,known:questions.filter(q=>q.result).length,correct:questions.filter(q=>q.result?.correct).length,total:questions.length,first:questions.filter(q=>q.result?.firstCorrect).length}}
  const stars=()=>LESSON_DATA.map(m=>completed.includes(m.id)?'★':'☆').join('');
- function stopVoice(){voice?.pause();voice=null;window.speechSynthesis?.cancel()}
- function announce(){stopVoice();voice=new Audio('assets/penamat/tahniah.mp3');voice.play().catch(()=>{})}
+ function stopVoice(){voice?.pause();voice=null;finishMusic.volume=.25;window.speechSynthesis?.cancel()}
+ function announce(){stopVoice();voice=new Audio('assets/penamat/tahniah.mp3');finishMusic.volume=.07;const restore=()=>{finishMusic.volume=.25};voice.addEventListener('ended',restore,{once:true});voice.addEventListener('error',restore,{once:true});voice.play().catch(restore)}
  function cast(){return `<div class="finish-cast" aria-label="SpongeBob, Patrick, Sandy, Squidward dan Encik Krabs meraikan kejayaan"><figure><div class="finish-sponge" role="img" aria-label="SpongeBob"></div><figcaption>SpongeBob</figcaption></figure><figure><img src="assets/penamat/patrick.png" alt="Patrick"><figcaption>Patrick</figcaption></figure><figure><img src="assets/penamat/sandy.webp" alt="Sandy"><figcaption>Sandy</figcaption></figure><figure><img src="assets/penamat/squidward-sijil-v2.webp" alt="Squidward"><figcaption>Squidward</figcaption></figure><figure><img src="assets/misi2/encik-krabs.webp" alt="Encik Krabs"><figcaption>Encik Krabs</figcaption></figure></div>`}
  function buttons(){return `<div class="finish-actions"><button id="finishCert">📜 LIHAT SIJIL</button><button id="finishReplay">🔄 MAIN SEMULA</button><button id="finishTeacher">👩‍🏫 PAPARAN GURU</button></div>`}
  function certificate(){return `<article class="finish-certificate"><span class="finish-seal">🏅</span><small>SiBaCa · Pengembaraan Membaca Bikini Bottom</small><h2>SIJIL PENCAPAIAN</h2><p>Dengan sukacitanya dianugerahkan kepada</p><h3>${safe(studentProfile?.name||'Wira Membaca')}</h3><p>Kelas: <strong>${safe(studentProfile?.className||'—')}</strong></p><p>kerana berjaya menyelesaikan kelima-lima misi membaca<br>dan mengumpulkan lima bintang SiBaCa.</p><div class="finish-stars">★★★★★</div><strong>WIRA MEMBACA BIKINI BOTTOM</strong><p>${new Date().toLocaleDateString('ms-MY',{day:'numeric',month:'long',year:'numeric'})}</p></article><div class="finish-actions"><button id="finishPrint">🖨️ CETAK / SIMPAN PDF</button><button id="finishBack">KEMBALI</button></div>`}
@@ -19,11 +38,13 @@
  function renderFinish(){if(modal?.id!=='finish')return;const ready=allDone(),m=metrics();let body;
  if(!ready){body=`<div class="finish-locked"><img src="assets/penamat/squidward-sijil-v2.webp" alt="Squidward"><h2>Selamat datang ke Rumah Squidward!</h2><p>Kumpulkan lima bintang dahulu untuk meraikan kejayaan kamu di sini.</p><div class="finish-stars">${stars()}</div><ul>${LESSON_DATA.map(x=>`<li>${completed.includes(x.id)?'✅':'⭐'} ${safe(x.place)} ${completed.includes(x.id)?'— selesai':''}</li>`).join('')}</ul><button id="finishMap">KEMBALI KE PETA</button></div>`}
  else if(view==='certificate')body=certificate();else if(view==='teacher')body=teacher();else body=`<div class="finish-party" aria-hidden="true">${Array.from({length:20},(_,i)=>`<i style="--x:${i*5}%;--delay:${-(i%6)}s;--c:${['#ffd76a','#ffa4dc','#90f1ea','#b5b0ff'][i%4]}"></i>`).join('')}</div><div class="finish-house"><img src="assets/penamat/squidward-sijil-v2.webp" alt="Squidward tersenyum sambil menyerahkan sijil kepada murid di hadapan rumahnya"><span>MISI TAMAT</span></div><div class="finish-welcome"><h2>TAHNIAH! ANDA WIRA MEMBACA BIKINI BOTTOM!</h2><p>Hebat, ${safe(studentProfile?.name||'kawan')}! Kamu telah menyelesaikan kelima-lima misi.</p><div class="finish-stars">★★★★★</div><div class="finish-score">Markah pemahaman: <strong>${m.correct} / ${m.total}</strong></div>${m.known<m.total?'<p class="finish-note">Markah bagi permainan terdahulu belum direkod sepenuhnya. Paparan Guru menunjukkan rekod yang tersedia.</p>':''}<button id="finishVoice">🔊 Dengar ucapan tahniah</button></div>${cast()}${buttons()}`;
- root.innerHTML=`<div class="finish-overlay"><section class="finish-modal ${view==='certificate'?'certificate-view':''}" role="dialog" aria-modal="true" aria-labelledby="finishTitle"><header class="finish-heading"><h2 id="finishTitle">🏆 MISI TAMAT · RUMAH SQUIDWARD</h2><button id="finishClose" aria-label="Tutup penamat">✕</button></header>${body}</section></div>`;
+ root.innerHTML=`<div class="finish-overlay"><section class="finish-modal ${view==='certificate'?'certificate-view':''}" role="dialog" aria-modal="true" aria-labelledby="finishTitle"><header class="finish-heading"><h2 id="finishTitle">🏆 MISI TAMAT · RUMAH SQUIDWARD</h2><div><button id="finishMusicToggle" aria-pressed="${finishMusicEnabled}" aria-label="${finishMusicEnabled?'Matikan muzik penamat':'Hidupkan muzik penamat'}">${finishMusicEnabled?'🎵 Muzik: buka':'🔇 Muzik: tutup'}</button><button id="finishClose" aria-label="Tutup penamat">✕</button></div></header>${body}</section></div>`;
+ syncFinishMusic();
+ const musicButton=document.getElementById('finishMusicToggle');musicButton.onclick=()=>{finishMusicEnabled=!finishMusicEnabled;musicButton.textContent=finishMusicEnabled?'🎵 Muzik: buka':'🔇 Muzik: tutup';musicButton.setAttribute('aria-pressed',String(finishMusicEnabled));musicButton.setAttribute('aria-label',finishMusicEnabled?'Matikan muzik penamat':'Hidupkan muzik penamat');syncFinishMusic()};
  const by=id=>document.getElementById(id);by('finishClose').onclick=closeModal;if(by('finishMap'))by('finishMap').onclick=closeModal;if(by('finishVoice'))by('finishVoice').onclick=announce;if(by('finishCert'))by('finishCert').onclick=()=>{view='certificate';stopVoice();renderFinish()};if(by('finishTeacher'))by('finishTeacher').onclick=()=>{view='teacher';stopVoice();renderFinish()};if(by('finishBack'))by('finishBack').onclick=()=>{view='welcome';renderFinish()};if(by('finishPrint'))by('finishPrint').onclick=()=>window.print();if(by('finishReplay'))by('finishReplay').onclick=()=>{if(!confirm('Mulakan semula? Lima bintang dan markah permainan ini akan dipadam.'))return;window.SiBaCaResults.clear();completed=[];try{localStorage.removeItem(KEY)}catch(e){}player={x:195,y:395};nearby=null;closeModal();latch=false;refresh()};
  }
  function openFinish(){pressed.clear();modal={id:'finish',place:'Rumah Squidward'};view='welcome';renderFinish();if(allDone()){if(typeof kitchenSound==='function')kitchenSound('win');announce()}}
- renderModal=function(){if(modal?.id==='finish')renderFinish();else previousRender()};closeModal=function(){if(modal?.id==='finish')stopVoice();previousClose()};refresh=function(){previousRefresh();if(allDone())document.getElementById('hint').textContent='Lima bintang lengkap! Pergi ke Rumah Squidward — MISI TAMAT!'};
+ renderModal=function(){if(modal?.id==='finish')renderFinish();else previousRender()};closeModal=function(){if(modal?.id==='finish'){stopVoice();stopFinishMusic()}previousClose()};refresh=function(){previousRefresh();if(allDone())document.getElementById('hint').textContent='Lima bintang lengkap! Pergi ke Rumah Squidward — MISI TAMAT!'};
  draw=function(t){previousDraw(t);ctx.save();const ready=allDone();ctx.translate(882,414);ctx.fillStyle=ready?'#ffe476':'#e2f5f7';ctx.strokeStyle='#ffffff';ctx.lineWidth=5;ctx.beginPath();ctx.roundRect(-116,-29,232,54,15);ctx.fill();ctx.stroke();ctx.fillStyle='#155872';ctx.textAlign='center';ctx.font='bold 25px Arial';ctx.fillText('MISI TAMAT',0,7);ctx.font='bold 17px Arial';ctx.fillStyle='#fff';ctx.strokeStyle='#19486c';ctx.lineWidth=5;const status=ready?'★ ★ ★ ★ ★':'Kumpul 5 bintang';ctx.strokeText(status,0,48);ctx.fillText(status,0,48);ctx.restore()};
  function checkEntrance(){const near=distance(player,finishPoint)<88;if(!near)latch=false;if(near&&!latch&&!modal&&!document.body.classList.contains('menu-open')){latch=true;openFinish()}requestAnimationFrame(checkEntrance)}requestAnimationFrame(checkEntrance);
  document.getElementById('reset')?.addEventListener('click',()=>{if(!completed.length)window.SiBaCaResults.clear()});
